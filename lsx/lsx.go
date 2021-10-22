@@ -1,11 +1,9 @@
 package lsx
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 
 	"github.com/souvikinator/lsx/utils"
@@ -25,8 +23,7 @@ type Lsx struct {
 	LinkMode bool
 	AllMode  bool
 
-	iconsFile string
-	Icons     map[string]string
+	Icons map[string]string
 }
 
 func (app *Lsx) Init() {
@@ -41,13 +38,6 @@ func (app *Lsx) Init() {
 	app.DirMode = false
 	app.FileMode = false
 	app.LinkMode = false
-
-	app.iconsFile, _ = filepath.Abs("icons/files.json")
-	//read json file
-	jsonFile, err := os.Open(app.iconsFile)
-	utils.CheckError(err)
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &app.Icons)
 }
 
 func (app *Lsx) DisplayIcons() {
@@ -95,7 +85,7 @@ func (app *Lsx) GetDirs() []string {
 }
 
 func (app *Lsx) ClearDirs() {
-	app.directory = nil
+	app.directory = make([]string, 0)
 }
 
 func (app *Lsx) GetFiles() []string {

@@ -2,12 +2,15 @@ package utils
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 // stack implementation to keep track of paths
@@ -43,6 +46,27 @@ func (s *Stack) Top() string {
 
 /*******misc utility functions******/
 
+func GetNonDotDirs(dirs []string) []string {
+	nonDotDirs := make([]string, 0)
+	for _, dir := range dirs {
+		if !strings.HasPrefix(dir, ".") {
+			nonDotDirs = append(nonDotDirs, dir)
+		}
+	}
+	return nonDotDirs
+}
+
+func GetTerminalHeight() int {
+	_, height, err := term.GetSize(0)
+	CheckError(err)
+	return height
+}
+
+func WriteToFile(filename, data string) {
+	err := ioutil.WriteFile(filename, []byte(data), 0644)
+	CheckError(err)
+}
+
 func CheckError(err error) {
 	if err != nil {
 		fmt.Printf("some error occured %v\n", err)
@@ -72,7 +96,10 @@ func ClearScreen(Os string) {
 		cmd.Stderr = os.Stderr
 		cmd.Run()
 	} else {
-		fmt.Println("\033[H\033[2J")
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Run()
 	}
 }
 

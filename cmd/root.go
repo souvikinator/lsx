@@ -20,14 +20,17 @@ var rootCmd = &cobra.Command{
 	Short: " A command line utility written in golang which beautifies and extends ls command",
 	Run: func(cmd *cobra.Command, args []string) {
 
+		App.Init()
+		App.AllMode, _ = cmd.Flags().GetBool("all")
+
 		templates := &promptui.SelectTemplates{
 			Label:    "📍 {{ . | magenta | italic | underline }}:",
 			Active:   "⯈ {{ . | green | bold }}",
 			Inactive: "  {{ . | cyan | bold}}",
 			Details: `
 _________________________
-[i] select ".." to move to previous directory
-[i] ctrl+c to exit
+* ctrl+c to exit
+* select ".." to move to previous directory
 `,
 		}
 
@@ -40,6 +43,8 @@ _________________________
 		home, _ := os.UserHomeDir()
 		pathStack.Push(startPath)
 
+		var TMP_FILE string = filepath.Join(home, ".lsx.tmp")
+
 		for {
 			utils.ClearScreen(platform)
 			App.ClearDirs()
@@ -49,6 +54,12 @@ _________________________
 			// get all the directories from the current path
 			App.GetPathContent(currentPath)
 			dirs := App.GetDirs()
+
+			// remove all directories starting with .
+			// if -a/--all is not used
+			if !App.AllMode {
+				dirs = utils.GetNonDotDirs(dirs)
+			}
 
 			// replace home dir in path with ~
 			shortCurrentPath := strings.Replace(currentPath, home, "~", -1)
@@ -64,14 +75,16 @@ _________________________
 				Label:     shortCurrentPath,
 				Items:     dirs,
 				Templates: templates,
-				Size:      7,
+				Size:      10,
 			}
 			_, selectedDir, err := prompt.Run()
 
 			// handle ctrl+c and error
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
-					// TODO: perform syscall to change dir
+					//write currentPath to ~/.config/lsx.yml
+					utils.WriteToFile(TMP_FILE, currentPath)
+					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
 				fmt.Printf("some error occured %v\n", err)
@@ -93,9 +106,6 @@ func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
-// func init() {
-// 	rootCmd.Flags().BoolP("file", "f", false, "Only display files")
-// 	rootCmd.Flags().BoolP("dir", "d", false, "Only display directories")
-// 	rootCmd.Flags().BoolP("symlink", "s", false, "Only display symlink")
-// 	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
-// }
+func init() {
+	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
+}

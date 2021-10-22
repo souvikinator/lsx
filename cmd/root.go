@@ -8,6 +8,7 @@ import (
 
 	"github.com/manifoldco/promptui"
 	"github.com/souvikinator/lsx/lsx"
+	"github.com/souvikinator/lsx/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -19,69 +20,70 @@ var rootCmd = &cobra.Command{
 	Short: " A command line utility written in golang which beautifies and extends ls command",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var path, prev, moveTo, startPath string
-		// flags
-		// App.Init()
-		// App.DisplayIcons()
-		// App.AllMode, _ = cmd.Flags().GetBool("all")
-		// App.DirMode, _ = cmd.Flags().GetBool("dir")
-		// App.LinkMode, _ = cmd.Flags().GetBool("link")
-		// App.FileMode, _ = cmd.Flags().GetBool("file")
-
 		templates := &promptui.SelectTemplates{
 			Label:    "📍 {{ . | magenta | italic | underline }}:",
 			Active:   "⯈ {{ . | green | bold }}",
 			Inactive: "  {{ . | cyan | bold}}",
 			Details: `
---------------------
+_________________________
 [i] select ".." to move to previous directory
 [i] ctrl+c to exit
 `,
 		}
 
-		path, _ = os.Getwd()
-		prev = path
-		startPath = path
-		home, _ := os.UserHomeDir()
+		var startPath string
+		var pathStack utils.Stack
+		pathStack.Init()
 
-		// replace home dir in path with ~
+		platform := utils.GetOs()
+		startPath, _ = os.Getwd()
+		home, _ := os.UserHomeDir()
+		pathStack.Push(startPath)
+
 		for {
+			utils.ClearScreen(platform)
 			App.ClearDirs()
-			App.GetPathContent(path)
+
+			currentPath := pathStack.Top()
+
+			// get all the directories from the current path
+			App.GetPathContent(currentPath)
 			dirs := App.GetDirs()
 
-			shortPath := strings.Replace(path, home, "~", -1)
+			// replace home dir in path with ~
+			shortCurrentPath := strings.Replace(currentPath, home, "~", -1)
 
-			if startPath != path {
+			// if current path is startPath
+			// then user can't go back as they started
+			// from startPath (there's no going back!)
+			if startPath != currentPath {
 				dirs = append([]string{".."}, dirs...)
 			}
 
-			// if no flag passed then lsx will be in exporer mode
 			prompt := promptui.Select{
-				Label:     shortPath,
+				Label:     shortCurrentPath,
 				Items:     dirs,
 				Templates: templates,
 				Size:      7,
 			}
 			_, selectedDir, err := prompt.Run()
 
+			// handle ctrl+c and error
 			if err != nil {
-				// handling ctrl+c
-				if fmt.Sprint(err) == "^C" {
-					fmt.Println("Exiting...")
-					return
-				} else {
-					fmt.Printf("some error occured %v\n", err)
-					return
+				if utils.IsKeyboardInterrupt(err) {
+					// TODO: perform syscall to change dir
+					os.Exit(0)
 				}
+				fmt.Printf("some error occured %v\n", err)
+				os.Exit(1)
 			}
+
 			if selectedDir == ".." {
-				moveTo = prev
+				pathStack.Pop()
 			} else {
-				moveTo = filepath.Join(path, selectedDir)
-				prev = path
+				moveTo := filepath.Join(currentPath, selectedDir)
+				pathStack.Push(moveTo)
 			}
-			path = moveTo
 		}
 
 	},

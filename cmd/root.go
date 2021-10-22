@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/gookit/color"
+	"github.com/manifoldco/promptui"
 	"github.com/souvikinator/lsx/lsx"
-	"github.com/souvikinator/lsx/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -19,64 +19,71 @@ var rootCmd = &cobra.Command{
 	Short: " A command line utility written in golang which beautifies and extends ls command",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var path string
-
+		var path, prev, moveTo, startPath string
 		// flags
-		App.Init()
-		App.DisplayIcons()
-		App.AllMode, _ = cmd.Flags().GetBool("all")
-		App.DirMode, _ = cmd.Flags().GetBool("dir")
-		App.LinkMode, _ = cmd.Flags().GetBool("link")
-		App.FileMode, _ = cmd.Flags().GetBool("file")
+		// App.Init()
+		// App.DisplayIcons()
+		// App.AllMode, _ = cmd.Flags().GetBool("all")
+		// App.DirMode, _ = cmd.Flags().GetBool("dir")
+		// App.LinkMode, _ = cmd.Flags().GetBool("link")
+		// App.FileMode, _ = cmd.Flags().GetBool("file")
 
-		// get current working directory if not path provided
-		if len(args) == 0 {
-			path, _ = os.Getwd()
-		} else {
-			path, _ = filepath.Abs(args[0])
-			// fmt.Println(path)
+		templates := &promptui.SelectTemplates{
+			Label:    "📍 {{ . | magenta | italic | underline }}:",
+			Active:   "⯈ {{ . | green | bold }}",
+			Inactive: "  {{ . | cyan | bold}}",
+			Details: `
+--------------------
+[i] select ".." to move to previous directory
+[i] ctrl+c to exit
+`,
 		}
 
-		if !utils.PathExists(path) {
-			color.Danger.Printf("'%s' path not found!", path)
-			os.Exit(0)
-		}
+		path, _ = os.Getwd()
+		prev = path
+		startPath = path
+		home, _ := os.UserHomeDir()
 
-		App.GetPathContent(path)
+		// replace home dir in path with ~
+		for {
+			App.ClearDirs()
+			App.GetPathContent(path)
+			dirs := App.GetDirs()
 
-		// print dirs
-		for _, p := range App.GetDirs() {
-			// if -a not used and p is dotfiles then skip
-			if !App.AllMode && utils.IsDotFile(p) {
-				continue
+			shortPath := strings.Replace(path, home, "~", -1)
+
+			if startPath != path {
+				dirs = append([]string{".."}, dirs...)
 			}
-			color.Blue.Printf("%s  ", color.Bold.Render(p))
-		}
-		// print files
-		for _, p := range App.GetFiles() {
-			// if -a not used and p is dotfiles then skip
-			if !App.AllMode && utils.IsDotFile(p) {
-				continue
+
+			// if no flag passed then lsx will be in exporer mode
+			prompt := promptui.Select{
+				Label:     shortPath,
+				Items:     dirs,
+				Templates: templates,
+				Size:      7,
 			}
-			color.Printf("%s  ", p)
-		}
-		// print symlink
-		for p, l := range App.GetLinks() {
-			// if -a not used and p is dotfiles then skip
-			if !App.AllMode && utils.IsDotFile(p) {
-				continue
+			_, selectedDir, err := prompt.Run()
+
+			if err != nil {
+				// handling ctrl+c
+				if fmt.Sprint(err) == "^C" {
+					fmt.Println("Exiting...")
+					return
+				} else {
+					fmt.Printf("some error occured %v\n", err)
+					return
+				}
 			}
-			if len(l) == 0 {
-				color.Printf("%s  ", color.Red.Render(p))
+			if selectedDir == ".." {
+				moveTo = prev
 			} else {
-				color.Printf("%s  ", color.Green.Render(p))
+				moveTo = filepath.Join(path, selectedDir)
+				prev = path
 			}
+			path = moveTo
 		}
 
-		for _, p := range App.GetMisc() {
-			color.Gray.Printf("%s  ", p)
-		}
-		fmt.Printf("\n")
 	},
 }
 
@@ -84,9 +91,9 @@ func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
-func init() {
-	rootCmd.Flags().BoolP("file", "f", false, "Only display files")
-	rootCmd.Flags().BoolP("dir", "d", false, "Only display directories")
-	rootCmd.Flags().BoolP("symlink", "s", false, "Only display symlink")
-	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
-}
+// func init() {
+// 	rootCmd.Flags().BoolP("file", "f", false, "Only display files")
+// 	rootCmd.Flags().BoolP("dir", "d", false, "Only display directories")
+// 	rootCmd.Flags().BoolP("symlink", "s", false, "Only display symlink")
+// 	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
+// }

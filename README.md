@@ -1,22 +1,58 @@
-# lsx (ls extended)
+<!-- <h1 align="center">
+  <br>
+	 TODO: logo here
 
-ls extended!
+<a href="https://github.com/souvikinator/lsx"><img src="" alt="lsx" width="600"></a>
+<br>
 
-# Install
+</h1> -->
+
+<h1 align="center">
+	ls-X
+</h1>
+
+<h3 align="center">Navigate through terminal like butter!</h3>
+<p align="center">
+  <a href="https://opensource.org/licenses/">
+    <img src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"
+         alt="license">
+  </a>
+  <a href="https://github.com/souvikinator/lsx/issues"><img src="https://img.shields.io/github/issues/souvikinator/lsx"></a>
+  <img src="https://img.shields.io/badge/made%20with-Go-blue">
+</p>
+
+<p align="center">
+	<a href="#-Demo">💻 Demo</a> •
+  <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
+  <a href="#-contribution">👨🧑 Contribution</a>
+</p>
+
+# 💻 Demo
+
+![lsx](https://github.com/souvikinator/lsx/assets/raw/demo.gif)
+
+# ⚗️ Install
+
+> **Note**: make sure to have Go installed and your GOPATH is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
 
 ### Step-1:
 
-install [icons-in-terminal](https://github.com/sebastiencs/icons-in-terminal/blob/master/build/icons_bash.sh)
+Clone the repo:
 
-or
+`git clone https://github.com/souvikinator/lsx.git`
 
-# Usage
+### Step-2:
 
-- `lsx [options]`
+> `cd lsx`
 
-> **NOTE**: no option implies ignore dot dirs
+> `chmod u+x install.sh`
 
-# options
+> `./install.sh`
 
-`-a/--all`
-`-l/--list`
+after installation is successful, add the following at the end of your shell file (.zhsrc, .bashrc ...)
+
+`source ~/.config/lsx/lsx.sh`
+
+and restart your terminal. Enjoy!
+
+If you liked the project, feel free to drop a star :)

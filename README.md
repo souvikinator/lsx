@@ -23,8 +23,7 @@
 
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
-  <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
-  <a href="#-contribution">👨🧑 Contribution</a>
+  <a href="#%EF%B8%8F-install">⚗️ Installation</a>
 </p>
 
 # 💻 Demo
@@ -58,13 +57,13 @@ Clone the repo:
 
 > `cd lsx`
 
-> `chmod u+x install.sh`
+> `chmod u+x script/install.sh`
 
-> `./install.sh`
+> `./script/install.sh`
 
-after installation is successful, add the following at the end of your shell file (.zhsrc, .bashrc ...)
+after installation is successful, add the following line at the end of your shell file (.zhsrc, .bashrc ...)
 
-`source ~/.config/lsx/lsx.sh`
+> `source ~/.config/lsx/lsx.sh`
 
 and restart your terminal. Enjoy!
 

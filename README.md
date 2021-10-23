@@ -41,7 +41,7 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 - [x] `-a`/`--all` mode
 - [x] search
 - [x] allow users to go back (user cannot go to the previous directory of the directory they started from, ref next todo)
-- [ ] allow User can navigate to previous directory from the one they started ([#2](https://github.com/souvikinator/lsx/issues/))
+- [ ] allow User can navigate to previous directory from the one they started ([#1](https://github.com/souvikinator/lsx/issues/))
 
 # ⚗️ Install
 

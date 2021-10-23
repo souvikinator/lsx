@@ -8,10 +8,10 @@
 </h1> -->
 
 <h1 align="center">
-	ls-X
+	LS Xtended
 </h1>
 
-<h3 align="center">Navigate through terminal like butter!</h3>
+<h3 align="center">Navigate through terminal like a pro!</h3>
 <p align="center">
   <a href="https://opensource.org/licenses/">
     <img src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"
@@ -29,7 +29,20 @@
 
 # 💻 Demo
 
-![lsx](https://github.com/souvikinator/lsx/assets/raw/demo.gif)
+In simple words **lsx** or **ls xtended** is combination of two commands: `ls` and `cd`. It lets you navigate through terminal with ease, somewhat similar to file explorer.
+
+> **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
+
+![lsx](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
+
+# 📋 Todo
+
+- [ ] make a logo
+- [ ] add icons  
+- [x] `-a`/`--all` mode
+- [x] search
+- [x] allow users to go back (user cannot go to the previous directory of the directory they started from, ref next todo)
+- [ ] allow User can navigate to previous directory from the one they started ([#2](https://github.com/souvikinator/lsx/issues/))
 
 # ⚗️ Install
 

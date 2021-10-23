@@ -1,15 +1,17 @@
-read -r -d '' BANNER << EOM
+read -r -d '' LSX_BANNER <<- EOM
 	_
  | |_____  __
  | / __\ \/ /
  | \__ \>  < 
  |_|___/_/\_\\
+
+ https://github.com/souvikinator/lsx
 EOM
 
 lsx () {
 	OPTION="$1"
 	if [[ "$OPTION" == "--help" || "$OPTION" == "-h" ]]; then
-		printf "\n%s \n\n" "$BANNER"
+		printf "\n%s \n\n" "$LSX_BANNER"
 		ls-x --help
 		return
 	elif [[ "$OPTION" == "--version" || "$OPTION" == "-v" ]]; then

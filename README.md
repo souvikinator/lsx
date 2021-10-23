@@ -19,6 +19,7 @@
   </a>
   <a href="https://github.com/souvikinator/lsx/issues"><img src="https://img.shields.io/github/issues/souvikinator/lsx"></a>
   <img src="https://img.shields.io/badge/made%20with-Go-blue">
+  <img src="https://goreportcard.com/badge/github.com/souvikinator/lsx" alt="go report card" />
 </p>
 
 <p align="center">

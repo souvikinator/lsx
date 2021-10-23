@@ -14,7 +14,7 @@
 <h3 align="center">Navigate through terminal like a pro!</h3>
 <p align="center">
   <a href="https://opensource.org/licenses/">
-    <img src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"
+    <img src="https://img.shields.io/github/license/souvikinator/lsx"
          alt="license">
   </a>
   <a href="https://github.com/souvikinator/lsx/issues"><img src="https://img.shields.io/github/issues/souvikinator/lsx"></a>

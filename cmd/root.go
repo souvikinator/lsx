@@ -50,8 +50,8 @@ _________________________
 		home, _ := os.UserHomeDir()
 		pathStack.Push(startPath)
 
-		var TMP_FILE string = filepath.Join(home, ".lsx.tmp")
-
+		var TMP_FILE string = filepath.Join(home, ".lsx", ".lsx.tmp")
+		utils.ClearScreen(platform)
 		for {
 			// utils.ClearScreen(platform)
 			App.ClearDirs()
@@ -124,6 +124,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
+	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) durectories as well")
 	rootCmd.Flags().BoolP("version", "v", false, "Display lsx version")
 }

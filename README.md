@@ -46,7 +46,7 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 
 # ⚗️ Install
 
-> **Note**: make sure to have Go installed and your GOPATH is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
+> ## **Note**: make sure to have Go installed and your GOPATH is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
 
 ### Step-1:
 
@@ -58,9 +58,9 @@ Clone the repo:
 
 > `cd lsx`
 
-> `chmod u+x script/install.sh`
+> `chmod u+x install.sh`
 
-> `./script/install.sh`
+> `./install.sh`
 
 after installation is successful, add the following line at the end of your shell file (.zhsrc, .bashrc ...)
 

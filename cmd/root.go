@@ -13,20 +13,27 @@ import (
 )
 
 var App lsx.Lsx
+var LSX_VERSION string = "0.1.0"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "lsx",
-	Short: " A command line utility written in golang which beautifies and extends ls command",
+	Short: " A command line utility, let's you navigate across the terminal like butter",
 	Run: func(cmd *cobra.Command, args []string) {
 
 		App.Init()
 		App.AllMode, _ = cmd.Flags().GetBool("all")
 
+		showVersion, _ := cmd.Flags().GetBool("version")
+		if showVersion {
+			fmt.Println("lsx,", LSX_VERSION)
+			os.Exit(0)
+		}
+
 		templates := &promptui.SelectTemplates{
 			Label:    "📍 {{ . | magenta | italic | underline }}:",
-			Active:   "⯈ {{ . | green | bold }}",
-			Inactive: "  {{ . | cyan | bold}}",
+			Active:   "⯈ {{ . | green | bold | italic }}",
+			Inactive: "  {{ . | cyan | bold }}",
 			Details: `
 _________________________
 * ctrl+c to exit
@@ -46,7 +53,7 @@ _________________________
 		var TMP_FILE string = filepath.Join(home, ".lsx.tmp")
 
 		for {
-			utils.ClearScreen(platform)
+			// utils.ClearScreen(platform)
 			App.ClearDirs()
 
 			currentPath := pathStack.Top()
@@ -71,11 +78,21 @@ _________________________
 				dirs = append([]string{".."}, dirs...)
 			}
 
+			searcher := func(input string, index int) bool {
+				dir := dirs[index]
+				name := strings.Replace(strings.ToLower(dir), " ", "", -1)
+				input = strings.Replace(strings.ToLower(input), " ", "", -1)
+
+				return strings.Contains(name, input)
+			}
+
 			prompt := promptui.Select{
-				Label:     shortCurrentPath,
-				Items:     dirs,
-				Templates: templates,
-				Size:      10,
+				Label:        shortCurrentPath,
+				Items:        dirs,
+				Templates:    templates,
+				Size:         11,
+				Searcher:     searcher,
+				HideSelected: true,
 			}
 			_, selectedDir, err := prompt.Run()
 
@@ -108,4 +125,5 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotfiles) files as well")
+	rootCmd.Flags().BoolP("version", "v", false, "Display lsx version")
 }

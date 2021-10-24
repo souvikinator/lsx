@@ -32,7 +32,7 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 # 📋 Todo
 
 - [ ] make a logo
-- [ ] add icons  
+- [ ] add icons
 - [x] `-a`/`--all` mode
 - [x] search
 - [x] allow users to go back (user cannot go to the previous directory of the directory they started from, ref next todo)
@@ -57,7 +57,7 @@ Clone the repo:
 
 > `./install.sh`
 
-after installation is successful, add the following line at the end of your shell file (.zhsrc, .bashrc ...)
+after installation is successful, add the following line at the end of your **current running shell resource file** (.zhsrc, .bashrc ...)
 
 > `source ~/.config/lsx/lsx.sh`
 

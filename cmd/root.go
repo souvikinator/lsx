@@ -129,6 +129,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) durectories as well")
+	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) directories as well")
 	rootCmd.Flags().BoolP("version", "v", false, "Display lsx version")
 }

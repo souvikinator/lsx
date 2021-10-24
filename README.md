@@ -1,14 +1,8 @@
-<!-- <h1 align="center">
+<h1 align="center">
   <br>
-	 TODO: logo here
-
-<a href="https://github.com/souvikinator/lsx"><img src="" alt="lsx" width="600"></a>
+<a href="https://github.com/souvikinator/lsx"><img src="https://github.com/souvikinator/lsx/raw/master/assets/lsx-logo.svg" alt="lsx" width="600"></a>
 <br>
 
-</h1> -->
-
-<h1 align="center">
-	LS Xtended
 </h1>
 
 <h3 align="center">Navigate through terminal like a pro!</h3>

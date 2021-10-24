@@ -19,7 +19,7 @@ fi
 cp "script/lsx.sh" "$HOME/.config/lsx/lsx.sh"
 
 # build
-go build -o "$HOME/go/bin"
+go build -o "$HOME/go/bin/ls-x"
 
 echo "INFO: build successful!"
 

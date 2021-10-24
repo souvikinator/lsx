@@ -50,7 +50,7 @@ _________________________
 		home, _ := os.UserHomeDir()
 		pathStack.Push(startPath)
 
-		var TMP_FILE string = filepath.Join(home, "lsx", ".lsx.tmp")
+		var TMP_FILE string = filepath.Join(home, ".config", "lsx", "lsx.tmp")
 		utils.ClearScreen(platform)
 		for {
 			// utils.ClearScreen(platform)

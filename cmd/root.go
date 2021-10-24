@@ -50,7 +50,12 @@ _________________________
 		home, _ := os.UserHomeDir()
 		pathStack.Push(startPath)
 
-		var TMP_FILE string = filepath.Join(home, ".config", "lsx", "lsx.tmp")
+		var lsx_config_path string = filepath.Join(home, ".config", "lsx")
+		var lsx_tmp_file string = filepath.Join(lsx_config_path, "lsx.tmp")
+
+		err := os.MkdirAll(lsx_config_path, 0664)
+		utils.CheckError(err)
+
 		utils.ClearScreen(platform)
 		for {
 			// utils.ClearScreen(platform)
@@ -100,7 +105,7 @@ _________________________
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
 					//write currentPath to ~/.config/lsx.yml
-					utils.WriteToFile(TMP_FILE, currentPath)
+					utils.WriteToFile(lsx_tmp_file, currentPath)
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}

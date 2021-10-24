@@ -5,10 +5,6 @@
 
 </h1>
 
-<h1 align="center">
-	LS Xtended
-</h1>
-
 <h3 align="center">Navigate through terminal like a pro!</h3>
 <p align="center">
   <a href="https://opensource.org/licenses/">

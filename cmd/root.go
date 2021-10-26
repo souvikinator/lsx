@@ -58,7 +58,7 @@ _________________________
 
 		utils.ClearScreen(platform)
 		for {
-			utils.ClearScreen(platform)
+			// utils.ClearScreen(platform)
 
 			// get all the directories from the current path
 			App.ClearDirs()

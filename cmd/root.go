@@ -41,14 +41,15 @@ _________________________
 `,
 		}
 
-		var startPath string
-		var pathStack utils.Stack
-		pathStack.Init()
-
 		platform := utils.GetOs()
-		startPath, _ = os.Getwd()
 		home, _ := os.UserHomeDir()
-		pathStack.Push(startPath)
+		var currentPath utils.Filepath
+		
+		if p, err := os.Getwd(); err != nil {
+			panic(err)
+		} else {
+			currentPath.To(p)
+		}
 
 		var lsx_config_path string = filepath.Join(home, ".config", "lsx")
 		var lsx_tmp_file string = filepath.Join(lsx_config_path, "lsx.tmp")
@@ -59,29 +60,19 @@ _________________________
 		utils.ClearScreen(platform)
 		for {
 			// utils.ClearScreen(platform)
-			App.ClearDirs()
-
-			currentPath := pathStack.Top()
 
 			// get all the directories from the current path
-			App.GetPathContent(currentPath)
-			dirs := App.GetDirs()
+			App.ClearDirs()
+			App.GetPathContent(currentPath.String())
 
+			dirs := App.GetDirs()
 			// remove all directories starting with .
 			// if -a/--all is not used
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
-
-			// replace home dir in path with ~
-			shortCurrentPath := strings.Replace(currentPath, home, "~", -1)
-
-			// if current path is startPath
-			// then user can't go back as they started
-			// from startPath (there's no going back!)
-			if startPath != currentPath {
-				dirs = append([]string{".."}, dirs...)
-			}
+			
+			dirs = append([]string{".."}, dirs...)
 
 			searcher := func(input string, index int) bool {
 				dir := dirs[index]
@@ -92,7 +83,7 @@ _________________________
 			}
 
 			prompt := promptui.Select{
-				Label:        shortCurrentPath,
+				Label:        strings.Replace(currentPath.String(), home, "~", -1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,
@@ -105,7 +96,7 @@ _________________________
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
 					//write currentPath to ~/.config/lsx.yml
-					utils.WriteToFile(lsx_tmp_file, currentPath)
+					utils.WriteToFile(lsx_tmp_file, currentPath.String())
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
@@ -113,12 +104,8 @@ _________________________
 				os.Exit(1)
 			}
 
-			if selectedDir == ".." {
-				pathStack.Pop()
-			} else {
-				moveTo := filepath.Join(currentPath, selectedDir)
-				pathStack.Push(moveTo)
-			}
+			currentPath.To(selectedDir)
+
 		}
 
 	},

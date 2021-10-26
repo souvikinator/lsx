@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,36 +12,30 @@ import (
 	"golang.org/x/term"
 )
 
-// stack implementation to keep track of paths
-type Stack struct {
-	data []string
+type Filepath struct {
+	parts []string
+	root  string
 }
 
-func (s *Stack) Init() {
-	s.data = make([]string, 0)
+func (fp *Filepath) String() string {
+	return filepath.Clean(fp.root + strings.Join(fp.parts, string(os.PathSeparator)))
 }
 
-func (s *Stack) Push(d string) {
-	s.data = append(s.data, d)
-}
-
-func (s *Stack) Pop() string {
-	if len(s.data) == 0 {
-		log.Panicln("underflow!")
-		os.Exit(1)
+func (fp *Filepath) To(path string) {
+	if filepath.IsAbs(path) {
+		fp.root = filepath.VolumeName(path)+string(os.PathSeparator)
+		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
+	} else if path == ".." {
+		if len(fp.parts) == 0 {
+			return
+		}
+		fp.parts = fp.parts[:len(fp.parts)-1]
+	} else {
+		fp.parts = append(fp.parts, path)
 	}
-	toBePoped := s.data[len(s.data)-1]
-	s.data = s.data[:len(s.data)-1]
-	return toBePoped
+	
 }
 
-func (s *Stack) Top() string {
-	if len(s.data) == 0 {
-		log.Panic("underflow!")
-		os.Exit(1)
-	}
-	return s.data[len(s.data)-1]
-}
 
 /*******misc utility functions******/
 

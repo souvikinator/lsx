@@ -19,7 +19,7 @@ lsx () {
 		return
 	else
 		ls-x "$OPTION"
-		LSX_CWD=$(cat "$HOME/.lsx.tmp")
+		LSX_CWD=$(cat "$HOME/.config/lsx/lsx.tmp")
 		cd "$LSX_CWD"
 	fi
 }

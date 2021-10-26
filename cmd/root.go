@@ -45,19 +45,20 @@ _________________________
 		
 		platform := utils.GetOs()
 		home, _ := os.UserHomeDir()
-		var TMP_FILE string = filepath.Join(home, "lsx", ".lsx.tmp")
-		
-	
-		var currentPath string
-
+    var currentPath string
 		currentPath, err := os.Getwd()
 		if err != nil {
 			panic(err)
 		}
+		var lsx_config_path string = filepath.Join(home, ".config", "lsx")
+		var lsx_tmp_file string = filepath.Join(lsx_config_path, "lsx.tmp")
 
-		// utils.ClearScreen(platform)
+		err := os.MkdirAll(lsx_config_path, 0664)
+		utils.CheckError(err)
+
+		utils.ClearScreen(platform)
 		for {
-			// utils.ClearScreen(platform)
+			utils.ClearScreen(platform)
 
 			// get all the directories from the current path
 			App.ClearDirs()
@@ -97,7 +98,7 @@ _________________________
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
 					//write currentPath to ~/.config/lsx.yml
-					utils.WriteToFile(TMP_FILE, currentPath)
+					utils.WriteToFile(lsx_tmp_file, currentPath)
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
@@ -130,6 +131,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) durectories as well")
+	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) directories as well")
 	rootCmd.Flags().BoolP("version", "v", false, "Display lsx version")
 }

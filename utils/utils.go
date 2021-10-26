@@ -37,7 +37,7 @@ func WriteToFile(filename, data string) {
 
 func CheckError(err error) {
 	if err != nil {
-		fmt.Printf("some error occured %v\n", err)
+		fmt.Printf("lsx error: some error occured %v\n", err)
 		os.Exit(1)
 	}
 }

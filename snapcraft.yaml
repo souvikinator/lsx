@@ -1,0 +1,11 @@
+name: lsx
+summary: navigate through terminal like pro
+description: |
+  lsx stands for ls-Xtended. It is very annoying to constantly use command cd and ls
+  to navigate to a directory in the terminal. lsx helps you with that, navigate 
+  through the terminal like a pro.
+  lsx also lets you search while navigating, making it easy to use and fast as flash. 
+version: git 
+apps:
+  ls-x:
+    command: your-snap

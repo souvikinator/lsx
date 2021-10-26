@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/manifoldco/promptui"
@@ -41,42 +42,38 @@ _________________________
 `,
 		}
 
-		var startPath string
-		var pathStack utils.Stack
-		pathStack.Init()
-
+		
 		platform := utils.GetOs()
-		startPath, _ = os.Getwd()
 		home, _ := os.UserHomeDir()
-		pathStack.Push(startPath)
-
 		var TMP_FILE string = filepath.Join(home, "lsx", ".lsx.tmp")
-		utils.ClearScreen(platform)
+		
+	
+		var currentPath string
+
+		currentPath, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+
+		// utils.ClearScreen(platform)
 		for {
 			// utils.ClearScreen(platform)
-			App.ClearDirs()
-
-			currentPath := pathStack.Top()
 
 			// get all the directories from the current path
+			App.ClearDirs()
 			App.GetPathContent(currentPath)
+			
 			dirs := App.GetDirs()
-
 			// remove all directories starting with .
 			// if -a/--all is not used
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
 
-			// replace home dir in path with ~
-			shortCurrentPath := strings.Replace(currentPath, home, "~", -1)
-
-			// if current path is startPath
-			// then user can't go back as they started
-			// from startPath (there's no going back!)
-			if startPath != currentPath {
-				dirs = append([]string{".."}, dirs...)
+			if currentPath != filepath.VolumeName(currentPath) {
+				dirs = append(dirs, "..")
 			}
+
 
 			searcher := func(input string, index int) bool {
 				dir := dirs[index]
@@ -87,7 +84,7 @@ _________________________
 			}
 
 			prompt := promptui.Select{
-				Label:        shortCurrentPath,
+				Label:        strings.Replace(currentPath, home, "~", -1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,
@@ -108,12 +105,21 @@ _________________________
 				os.Exit(1)
 			}
 
+			fmt.Println("aaa", currentPath)
+			parts := strings.Split(currentPath, string(os.PathSeparator))
 			if selectedDir == ".." {
-				pathStack.Pop()
+				parts = parts[:len(parts)-1]
 			} else {
-				moveTo := filepath.Join(currentPath, selectedDir)
-				pathStack.Push(moveTo)
+				parts = append(parts, selectedDir)
 			}
+			path := strings.Join(parts, string(os.PathSeparator))
+			if path == filepath.VolumeName(currentPath) && runtime.GOOS == "windows" {
+				currentPath = path + string(os.PathSeparator)
+			} else {
+				currentPath = path
+			}
+			currentPath = filepath.Clean(currentPath)
+		
 		}
 
 	},

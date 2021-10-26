@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,37 +11,6 @@ import (
 
 	"golang.org/x/term"
 )
-
-// stack implementation to keep track of paths
-type Stack struct {
-	data []string
-}
-
-func (s *Stack) Init() {
-	s.data = make([]string, 0)
-}
-
-func (s *Stack) Push(d string) {
-	s.data = append(s.data, d)
-}
-
-func (s *Stack) Pop() string {
-	if len(s.data) == 0 {
-		log.Panicln("underflow!")
-		os.Exit(1)
-	}
-	toBePoped := s.data[len(s.data)-1]
-	s.data = s.data[:len(s.data)-1]
-	return toBePoped
-}
-
-func (s *Stack) Top() string {
-	if len(s.data) == 0 {
-		log.Panic("underflow!")
-		os.Exit(1)
-	}
-	return s.data[len(s.data)-1]
-}
 
 /*******misc utility functions******/
 

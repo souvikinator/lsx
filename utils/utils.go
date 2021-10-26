@@ -12,6 +12,31 @@ import (
 	"golang.org/x/term"
 )
 
+type Filepath struct {
+	parts []string
+	root  string
+}
+
+func (fp *Filepath) String() string {
+	return filepath.Clean(fp.root + strings.Join(fp.parts, string(os.PathSeparator)))
+}
+
+func (fp *Filepath) To(path string) {
+	if filepath.IsAbs(path) {
+		fp.root = filepath.VolumeName(path)+string(os.PathSeparator)
+		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
+	} else if path == ".." {
+		if len(fp.parts) == 0 {
+			return
+		}
+		fp.parts = fp.parts[:len(fp.parts)-1]
+	} else {
+		fp.parts = append(fp.parts, path)
+	}
+	
+}
+
+
 /*******misc utility functions******/
 
 func GetNonDotDirs(dirs []string) []string {

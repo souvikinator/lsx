@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/manifoldco/promptui"
@@ -42,14 +41,16 @@ _________________________
 `,
 		}
 
-		
 		platform := utils.GetOs()
 		home, _ := os.UserHomeDir()
-    var currentPath string
-		currentPath, err := os.Getwd()
-		if err != nil {
+		var currentPath utils.Filepath
+		
+		if p, err := os.Getwd(); err != nil {
 			panic(err)
+		} else {
+			currentPath.To(p)
 		}
+
 		var lsx_config_path string = filepath.Join(home, ".config", "lsx")
 		var lsx_tmp_file string = filepath.Join(lsx_config_path, "lsx.tmp")
 
@@ -62,19 +63,14 @@ _________________________
 
 			// get all the directories from the current path
 			App.ClearDirs()
-			App.GetPathContent(currentPath)
-			
+			App.GetPathContent(currentPath.String())
+
 			dirs := App.GetDirs()
 			// remove all directories starting with .
 			// if -a/--all is not used
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
-
-			if currentPath != filepath.VolumeName(currentPath) {
-				dirs = append(dirs, "..")
-			}
-
 
 			searcher := func(input string, index int) bool {
 				dir := dirs[index]
@@ -85,8 +81,8 @@ _________________________
 			}
 
 			prompt := promptui.Select{
-				Label:        strings.Replace(currentPath, home, "~", -1),
-				Items:        dirs,
+				Label:        strings.Replace(currentPath.String(), home, "~", -1),
+				Items:        append([]string{".."}, dirs...),
 				Templates:    templates,
 				Size:         11,
 				Searcher:     searcher,
@@ -98,7 +94,7 @@ _________________________
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
 					//write currentPath to ~/.config/lsx.yml
-					utils.WriteToFile(lsx_tmp_file, currentPath)
+					utils.WriteToFile(lsx_tmp_file, currentPath.String())
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
@@ -106,21 +102,8 @@ _________________________
 				os.Exit(1)
 			}
 
-			fmt.Println("aaa", currentPath)
-			parts := strings.Split(currentPath, string(os.PathSeparator))
-			if selectedDir == ".." {
-				parts = parts[:len(parts)-1]
-			} else {
-				parts = append(parts, selectedDir)
-			}
-			path := strings.Join(parts, string(os.PathSeparator))
-			if path == filepath.VolumeName(currentPath) && runtime.GOOS == "windows" {
-				currentPath = path + string(os.PathSeparator)
-			} else {
-				currentPath = path
-			}
-			currentPath = filepath.Clean(currentPath)
-		
+			currentPath.To(selectedDir)
+
 		}
 
 	},

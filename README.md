@@ -31,7 +31,7 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 
 # 📋 Todo
 
-- [ ] make a logo
+- [x] make a logo
 - [ ] add icons
 - [x] `-a`/`--all` mode
 - [x] search

@@ -71,6 +71,8 @@ _________________________
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
+			
+			dirs = append([]string{".."}, dirs...)
 
 			searcher := func(input string, index int) bool {
 				dir := dirs[index]
@@ -82,7 +84,7 @@ _________________________
 
 			prompt := promptui.Select{
 				Label:        strings.Replace(currentPath.String(), home, "~", -1),
-				Items:        append([]string{".."}, dirs...),
+				Items:        dirs,
 				Templates:    templates,
 				Size:         11,
 				Searcher:     searcher,

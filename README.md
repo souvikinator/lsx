@@ -12,6 +12,7 @@
          alt="license">
   </a>
   <a href="https://github.com/souvikinator/lsx/issues"><img src="https://img.shields.io/github/issues/souvikinator/lsx"></a>
+<a href="https://codebeat.co/projects/github-com-souvikinator-lsx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/08315931-e796-4828-bfb0-18b6750d6f2a" /></a>
   <img src="https://img.shields.io/badge/made%20with-Go-blue">
   <img src="https://goreportcard.com/badge/github.com/souvikinator/lsx" alt="go report card" />
 </p>

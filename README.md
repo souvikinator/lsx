@@ -19,7 +19,8 @@
 
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
-  <a href="#%EF%B8%8F-install">⚗️ Installation</a>
+  <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
+	<a href-"#-contribution">🐜 Contribution</a>
 </p>
 
 # 💻 Demo
@@ -28,7 +29,29 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 
 > **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
 
+## Navigate through terminal and perform search:
+
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
+
+## Show hidden files as well
+
+![lsx](https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif)
+
+## Set **alias** for directory paths
+
+![lsx](https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif)
+
+> ### Note: `set-alias` can also be used to update any existing alias
+> Let's say alias `abc` already exists for path `a/b/c`. on can update it like so:
+> `lsx set-alias -n abc -p d/e/f`
+
+## List **alias** created by user
+
+![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
+
+## Remove existing **alias** 
+
+![lsx](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
 
 # 📋 Todo
 
@@ -62,4 +85,17 @@ after installation is successful, add the following line at the end of your **cu
 
 and restart your terminal. Enjoy!
 
+**Note**: Feel free to open an issue if any problems faced during installation.
+
 If you liked the project, feel free to drop a star :)
+
+# 🐜 Contribution
+
+You can improve this project by contributing in following ways:
+
+- report bugs
+- fix issues
+- request features
+- asking questions (just open an issue)
+
+and any other way if not mentioned here.

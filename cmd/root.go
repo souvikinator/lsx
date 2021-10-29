@@ -53,7 +53,7 @@ _______________________________
 			currentPath.To(p)
 		}
 
-		// utils.ClearScreen(platform)
+		utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
 			App.ClearDirs()

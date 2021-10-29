@@ -25,7 +25,7 @@
 
 # 💻 Demo
 
-In simple words **lsx** or **ls xtended** is combination of two commands: `ls` and `cd`. It lets you navigate through terminal with ease, somewhat similar to file explorer.
+In simple words **lsx** or **ls xtended** is combination of two commands: `ls` and `cd`. It lets you navigate through terminal with ease and much more...
 
 > **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
 

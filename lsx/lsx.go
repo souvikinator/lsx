@@ -38,7 +38,7 @@ func (app *Lsx) Init() {
 	app.file = make([]string, 0)
 	app.misc = make([]string, 0)
 	app.links = make(map[string]string)
-
+	app.Alias = make(map[string]string)
 	app.AllMode = false
 	app.DirMode = false
 	app.FileMode = false

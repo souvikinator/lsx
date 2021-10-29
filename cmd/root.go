@@ -40,8 +40,8 @@ var rootCmd = &cobra.Command{
 			Inactive: "  {{ . | cyan | bold }}",
 			Details: `
 _______________________________
-{{ ".." | magenta }}  {{ ": previous dir" | faint }}
-{{ "ctrl+c" | magenta }}  {{ ": exit" | faint }}
+{{ ".." | magenta }}	{{ ": previous dir" | faint }}
+{{ "ctrl+c" | magenta }}	{{ ": exit" | faint }}
 `,
 		}
 

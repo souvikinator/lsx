@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/manifoldco/promptui"
@@ -13,54 +11,50 @@ import (
 )
 
 var App lsx.Lsx
-var LSX_VERSION string = "0.1.0"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "lsx",
-	Short: " A command line utility, let's you navigate across the terminal like butter",
+	Use:     "lsx",
+	Version: App.Version,
+	Args:    cobra.ArbitraryArgs,
+	Short:   " A command line utility, let's you navigate across the terminal like butter",
+	Long:    `lsx let's you navigate across the terminal using cursors along with search. One can also set aliases for paths.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		App.Init()
+		home := utils.HomeDir()
+		platform := utils.GetOs()
+
 		App.AllMode, _ = cmd.Flags().GetBool("all")
 
-		showVersion, _ := cmd.Flags().GetBool("version")
-		if showVersion {
-			fmt.Println("lsx,", LSX_VERSION)
+		// if alias is passed
+		if len(args) > 0 {
+			pathAlias := args[0]
+			ChdirToAlias(pathAlias)
+			utils.ClearScreen(platform)
 			os.Exit(0)
 		}
-
+		// if no args then prompt the user
 		templates := &promptui.SelectTemplates{
 			Label:    "📍 {{ . | magenta | italic | underline }}:",
 			Active:   "⯈ {{ . | green | bold | italic }}",
 			Inactive: "  {{ . | cyan | bold }}",
 			Details: `
-_________________________
-* ctrl+c to exit
-* select ".." to move to previous directory
+_______________________________
+{{ ".." | magenta }}  {{ ": previous dir" | faint }}
+{{ "ctrl+c" | magenta }}  {{ ": exit" | faint }}
 `,
 		}
 
-		platform := utils.GetOs()
-		home, _ := os.UserHomeDir()
 		var currentPath utils.Filepath
-		
+
 		if p, err := os.Getwd(); err != nil {
 			panic(err)
 		} else {
 			currentPath.To(p)
 		}
 
-		var lsx_config_path string = filepath.Join(home, ".config", "lsx")
-		var lsx_tmp_file string = filepath.Join(lsx_config_path, "lsx.tmp")
-
-		err := os.MkdirAll(lsx_config_path, 0664)
-		utils.CheckError(err)
-
-		utils.ClearScreen(platform)
+		// utils.ClearScreen(platform)
 		for {
-			// utils.ClearScreen(platform)
-
 			// get all the directories from the current path
 			App.ClearDirs()
 			App.GetPathContent(currentPath.String())
@@ -71,7 +65,7 @@ _________________________
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
-			
+
 			dirs = append([]string{".."}, dirs...)
 
 			searcher := func(input string, index int) bool {
@@ -95,13 +89,14 @@ _________________________
 			// handle ctrl+c and error
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
-					//write currentPath to ~/.config/lsx.yml
-					utils.WriteToFile(lsx_tmp_file, currentPath.String())
+
+					//write currentPath to temp file
+					//for use after the process ends
+					utils.WriteToFile(App.TempFile, currentPath.String())
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
-				fmt.Printf("some error occured %v\n", err)
-				os.Exit(1)
+				utils.CheckError(err)
 			}
 
 			currentPath.To(selectedDir)
@@ -116,6 +111,33 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("all", "a", false, "Display hidden (dotdirs) directories as well")
-	rootCmd.Flags().BoolP("version", "v", false, "Display lsx version")
+	App.Init()
+	// commands
+	rootCmd.AddCommand(aliasCmd)
+	rootCmd.AddCommand(removeAliasCmd)
+	rootCmd.AddCommand(setAliasCmd)
+
+	//flags
+	rootCmd.Flags().BoolP("all", "a", false, "display hidden (dotdirs) directories as well")
+}
+
+func ChdirToAlias(pathAlias string) {
+	if len(App.Alias) == 0 {
+		utils.Warn("no alias found in records")
+		utils.Warn("get started by using 'set-alias' command")
+		os.Exit(0)
+	}
+
+	moveToPath, ok := App.Alias[pathAlias]
+	if !ok {
+		utils.Err("alias '" + pathAlias + "' not found")
+	}
+
+	// path corresponding to alias exists?
+	if !utils.PathExists(moveToPath) {
+		utils.Err("'" + dirPath + "' not found, make sure that the path exists and is a directory")
+	}
+
+	utils.WriteToFile(App.TempFile, moveToPath)
+
 }

@@ -1,17 +1,18 @@
 <h1 align="center">
   <br>
-<a href="https://github.com/souvikinator/lsx"><img src="https://github.com/souvikinator/lsx/raw/master/assets/lsx-logo.svg" alt="lsx" width="600"></a>
+<a href="https://github.com/souvikinator/lsx"><img src="https://github.com/souvikinator/lsx/raw/master/assets/lsx-logo.svg" alt="lsx" width="400" height="350"></a>
 <br>
 
 </h1>
 
-<h3 align="center">Navigate through terminal like a pro!</h3>
+<h3 align="center">Navigate through terminal like a pro 😎 </h3>
 <p align="center">
   <a href="https://opensource.org/licenses/">
     <img src="https://img.shields.io/badge/licence-MIT-brightgreen"
          alt="license">
   </a>
   <a href="https://github.com/souvikinator/lsx/issues"><img src="https://img.shields.io/github/issues/souvikinator/lsx"></a>
+<a href="https://codebeat.co/projects/github-com-souvikinator-lsx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/08315931-e796-4828-bfb0-18b6750d6f2a" /></a>
   <img src="https://img.shields.io/badge/made%20with-Go-blue">
   <img src="https://goreportcard.com/badge/github.com/souvikinator/lsx" alt="go report card" />
 </p>
@@ -31,12 +32,11 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 
 # 📋 Todo
 
-- [ ] make a logo
+- [x] make a logo
 - [ ] add icons
 - [x] `-a`/`--all` mode
 - [x] search
-- [x] allow users to go back (user cannot go to the previous directory of the directory they started from, ref next todo)
-- [ ] allow User can navigate to previous directory from the one they started ([#1](https://github.com/souvikinator/lsx/issues/))
+- [x] allow User can navigate to previous directory from the one they started ([#1](https://github.com/souvikinator/lsx/issues/))
 
 # ⚗️ Install
 

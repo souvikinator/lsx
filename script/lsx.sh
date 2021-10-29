@@ -1,5 +1,15 @@
 TEMP_FILE="$HOME/.config/lsx/lsx.tmp"
 
+LSX_BANNER="
+    __    _  __
+   / /___| |/ /
+  / / ___/   / 
+ / (__  )   |  
+/_/____/_/|_|tended
+
+github.com/souvikinator/lsx
+"
+
 lsx () {
 	ARGS=("$@")
 	ARGS_LEN="${#ARGS[@]}"
@@ -11,9 +21,15 @@ lsx () {
 		cd "$LSX_CWD"
 		true > "$TEMP_FILE"
 	else
-		ls-x $ARGS
-		LSX_CWD=$(cat "$TEMP_FILE")
-		cd "$LSX_CWD"
-		true > "$TEMP_FILE"
+		if [[ "${ARGS[0]}" == "--help" ]];then
+			printf "%s\n" "$LSX_BANNER"
+			ls-x --help
+			return
+		else
+			ls-x ${ARGS[@]}
+			LSX_CWD=$(cat "$TEMP_FILE")
+			cd "$LSX_CWD"
+			true > "$TEMP_FILE"
+		fi
 	fi
 }

@@ -20,7 +20,7 @@
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
   <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
-	<a href-"#-Contribution">🐜 Contribution</a>
+	<a href-"#-contribution">🐜 Contribution</a>
 </p>
 
 # 💻 Demo

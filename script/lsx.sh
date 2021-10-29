@@ -1,25 +1,19 @@
-read -r -d '' LSX_BANNER <<- EOM
-	_
- | |_____  __
- | / __\ \/ /
- | \__ \>  < 
- |_|___/_/\_\\
-
- https://github.com/souvikinator/lsx
-EOM
+TEMP_FILE="$HOME/.config/lsx/lsx.tmp"
 
 lsx () {
-	OPTION="$1"
-	if [[ "$OPTION" == "--help" || "$OPTION" == "-h" ]]; then
-		printf "\n%s \n\n" "$LSX_BANNER"
-		ls-x --help
-		return
-	elif [[ "$OPTION" == "--version" || "$OPTION" == "-v" ]]; then
-		ls-x --version
-		return
-	else
-		ls-x "$OPTION"
-		LSX_CWD=$(cat "$HOME/.config/lsx/lsx.tmp")
+	ARGS=("$@")
+	ARGS_LEN="${#ARGS[@]}"
+
+
+	if [[ ARGS_LEN -lt 1 ]];then
+		ls-x
+		LSX_CWD=$(cat "$TEMP_FILE")
 		cd "$LSX_CWD"
+		true > "$TEMP_FILE"
+	else
+		ls-x $ARGS
+		LSX_CWD=$(cat "$TEMP_FILE")
+		cd "$LSX_CWD"
+		true > "$TEMP_FILE"
 	fi
 }

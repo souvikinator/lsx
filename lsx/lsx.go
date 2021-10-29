@@ -1,9 +1,9 @@
 package lsx
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/souvikinator/lsx/utils"
@@ -23,27 +23,43 @@ type Lsx struct {
 	LinkMode bool
 	AllMode  bool
 
-	Icons map[string]string
+	Version   string
+	ConfigDir string
+	AliasFile string
+	TempFile  string
+
+	Alias map[string]string
 }
 
 func (app *Lsx) Init() {
+	//data
 	app.raw = make([]string, 0)
 	app.directory = make([]string, 0)
 	app.file = make([]string, 0)
 	app.misc = make([]string, 0)
 	app.links = make(map[string]string)
-	app.Icons = make(map[string]string)
 
 	app.AllMode = false
 	app.DirMode = false
 	app.FileMode = false
 	app.LinkMode = false
-}
 
-func (app *Lsx) DisplayIcons() {
-	for key, icon := range app.Icons {
-		fmt.Printf("%s 	%s\n", key, icon)
-	}
+	app.Version = "v0.1.3"
+	home := utils.HomeDir()
+	app.ConfigDir = filepath.Join(home, ".config", "lsx")
+	app.AliasFile = filepath.Join(app.ConfigDir, "alias.yaml")
+	app.TempFile = filepath.Join(app.ConfigDir, "lsx.tmp")
+
+	// create configDir if doesn't exist
+	err := os.MkdirAll(app.ConfigDir, 0664)
+	utils.CheckError(err)
+
+	// create alias file and temp file
+	utils.CreateFile(app.AliasFile)
+	utils.CreateFile(app.TempFile)
+
+	// read data from alias file
+	utils.ReadYamlFile(app.AliasFile, &app.Alias)
 }
 
 func (app *Lsx) NoFlagPassed() bool {
@@ -74,7 +90,6 @@ func (app *Lsx) GetPathContent(path string) {
 			app.misc = append(app.misc, fileName)
 
 		}
-		//TODO: check for executable
 
 		app.raw = append(app.raw, fileName)
 	}

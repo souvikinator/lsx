@@ -20,7 +20,7 @@
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
   <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
-	<a href-"#-contribution">🐜 Contribution</a>
+	<a href="#-contribution">🐜 Contribution</a>
 </p>
 
 # 💻 Demo
@@ -31,25 +31,55 @@ In simple words **lsx** or **ls xtended** is combination of two commands: `ls` a
 
 ## Navigate through terminal and perform search:
 
+- use `/` to trigger search and start typing to search
+
+```bash
+lsx
+```
+
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
 
 ## Show hidden files as well
+
+```bash
+lsx -a
+```
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif)
 
 ## Set **alias** for directory paths
 
+```bash
+lsx set-alias -n somealias -p path/to/be/aliased
+```
+or
+```bash
+lsx set-alias --path-name somealias --path path/to/be/aliased
+```
+
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif)
 
-> ### Note: `set-alias` can also be used to update any existing alias
-> Let's say alias `abc` already exists for path `a/b/c`. on can update it like so:
-> `lsx set-alias -n abc -p d/e/f`
+## Updating Alias
+
+`set-alias` can also be used to update any existing alias. Let's say alias `abc` already exists for path `a/b/c`. on can update it like so:
+
+```bash
+lsx set-alias -n abc -p d/e/f
+```
 
 ## List **alias** created by user
+
+```bash
+lsx alias
+```
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
 
 ## Remove existing **alias** 
+
+```bash
+lsx remove-alias aliasname
+```
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
 

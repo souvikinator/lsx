@@ -9,7 +9,9 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/gookit/color"
 	"golang.org/x/term"
+	"gopkg.in/yaml.v3"
 )
 
 type Filepath struct {
@@ -23,7 +25,7 @@ func (fp *Filepath) String() string {
 
 func (fp *Filepath) To(path string) {
 	if filepath.IsAbs(path) {
-		fp.root = filepath.VolumeName(path)+string(os.PathSeparator)
+		fp.root = filepath.VolumeName(path) + string(os.PathSeparator)
 		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
 	} else if path == ".." {
 		if len(fp.parts) == 0 {
@@ -33,11 +35,16 @@ func (fp *Filepath) To(path string) {
 	} else {
 		fp.parts = append(fp.parts, path)
 	}
-	
+
 }
 
-
 /*******misc utility functions******/
+
+func HomeDir() string {
+	home, err := os.UserHomeDir()
+	CheckError(err)
+	return home
+}
 
 func GetNonDotDirs(dirs []string) []string {
 	nonDotDirs := make([]string, 0)
@@ -55,8 +62,28 @@ func GetTerminalHeight() int {
 	return height
 }
 
-func WriteToFile(filename, data string) {
-	err := ioutil.WriteFile(filename, []byte(data), 0644)
+func ReadYamlFile(filepath string, data *map[string]string) {
+	f, err := ioutil.ReadFile(filepath)
+	CheckError(err)
+	err = yaml.Unmarshal([]byte(f), data)
+	CheckError(err)
+}
+
+func CreateFile(filepath string) {
+	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0666)
+	CheckError(err)
+	defer f.Close()
+}
+
+func WriteYamlFile(filepath string, data map[string]string) {
+	d, err := yaml.Marshal(data)
+	CheckError(err)
+	err = ioutil.WriteFile(filepath, d, 0644)
+	CheckError(err)
+}
+
+func WriteToFile(filepath, data string) {
+	err := ioutil.WriteFile(filepath, []byte(data), 0644)
 	CheckError(err)
 }
 
@@ -119,10 +146,8 @@ func PathIsDir(path string) bool {
 
 func PathIsLink(path string) bool {
 	abs, err := filepath.Abs(path)
-	// fmt.Println("abs: ", abs)
 	CheckError(err)
 	src, _ := filepath.EvalSymlinks(path)
-	// fmt.Println("src: ", src)
 	return src != abs
 }
 
@@ -133,8 +158,19 @@ func IsDotFile(filename string) bool {
 func ResolveLink(path string) string {
 	absPath, err := filepath.Abs(path)
 	CheckError(err)
-	// fmt.Println(">>")
 	src, _ := filepath.EvalSymlinks(absPath)
-	// fmt.Println(">>")
 	return src
+}
+
+func Err(msg string) {
+	color.Error.Prompt(msg)
+	os.Exit(1)
+}
+
+func Warn(msg string) {
+	color.Warn.Prompt(msg)
+}
+
+func Info(msg string) {
+	color.Info.Prompt(msg)
 }

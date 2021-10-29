@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	Version: App.Version,
 	Args:    cobra.ArbitraryArgs,
 	Short:   " A command line utility, let's you navigate across the terminal like butter",
-	Long:    `lsx let's you navigate across the terminal using cursors along with search. One can also set aliases for paths.`,
+	Long:    `lsx stands for "ls Xtended". It let's you navigate across the terminal using cursors along with search. One can also set aliases for paths.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		home := utils.HomeDir()

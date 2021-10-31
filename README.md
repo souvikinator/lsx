@@ -133,7 +133,7 @@ You can improve this project by contributing in following ways:
 
 and any other way if not mentioned here.
 
-# ❗Know Issues
+# ❗Known Issues
 
 As of now the installation process is painful and the reason is a program runs as a child process in a terminal so eveything happens withing that child process. When we change the directory from go program the directory changes for that executable or to be specific "for that child process" and not of the shell. Which is why one needs to source a script in their shell resource file (`.zshrc`, `.bashrc`...).
 

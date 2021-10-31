@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-<a href="https://github.com/souvikinator/lsx"><img src="https://github.com/souvikinator/lsx/raw/master/assets/lsx-logo.svg" alt="lsx" width="400" height="350"></a>
+<a href="https://github.com/souvikinator/lsx"><img src="https://github.com/souvikinator/lsx/raw/master/assets/lsx-logo.png" alt="lsx"></a>
 <br>
 
 </h1>

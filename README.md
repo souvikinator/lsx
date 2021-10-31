@@ -20,12 +20,15 @@
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
   <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
-	<a href="#-contribution">🐜 Contribution</a>
+	<a href="#-contribution">🐜 Contribution</a> •
+	<a href="#-known-issues"> ❗Known Issues </a>
 </p>
 
-# 💻 Demo
+# ❓ Why?
 
-In simple words **lsx** or **ls xtended** is combination of two commands: `ls` and `cd`. It lets you navigate through terminal with ease and much more...
+It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal. **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory.
+
+# 💻 Demo
 
 > **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
 
@@ -129,3 +132,11 @@ You can improve this project by contributing in following ways:
 - asking questions (just open an issue)
 
 and any other way if not mentioned here.
+
+# ❗Know Issues
+
+As of now the installation process is painful and the reason is a program runs as a child process in a terminal so eveything happens withing that child process. When we change the directory from go program the directory changes for that executable or to be specific "for that child process" and not of the shell. Which is why one needs to source a script in their shell resource file (`.zshrc`, `.bashrc`...).
+
+The script contains a bash function as a wrapper around the lsx binary to make the whole `cd` thing work. This is what is prevent lsx to be distributed using some package manager. 
+
+If anyone can comeup with something then feel free to open issue.

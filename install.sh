@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+ZSH_DIR="$HOME/.oh-my-zsh"
+ZSH_FUNC_DIR="$ZSH_DIR/functions"
+
+FISH_DIR="$HOME/.config/fish"
+FISH_FUNC_DIR="$FISH_DIR/functions"
+
 # git installed?
 if ! [[ -x "$(command -v git)" ]];then
 	echo "ERROR: Git not installed!"
@@ -16,21 +22,39 @@ if ! [[ -d "$HOME/.config/lsx" ]];then
 	mkdir -p "$HOME/.config/lsx"
 fi
 
+# bash
 cp "script/lsx.sh" "$HOME/.config/lsx/lsx.sh"
 
-# build
-go build -o "$HOME/go/bin/ls-x"
+#zsh
+if [[ -d "$ZSH_DIR" ]];then
+	mkdir -p "$ZSH_FUNC_DIR"
+  cp "script/lsx.sh" "$ZSH_FUNC_DIR/lsx"
+fi
 
-echo "INFO: build successful!"
+#fish
+if [[ -d "$FISH_FUNC_DIR" ]];then
+  cp "script/lsx.fish" "$FISH_FUNC_DIR/lsx.fish"
+fi
+
+# build
+go build -o "$GOPATH/bin/ls-x"
+
+echo "INFO: build Success!"
 
 cat <<-END
 
-	All set, just add the following lines at the end of your shell resource file (.zshrc, .bashrc ....)
+ZSH users, use following command:
+
+		autoload -Uz lsx
+
+BASH users, add following line at the end of .bashrc:  
 
 		source ~/.config/lsx/lsx.sh
 
-	then restart your terminal.
+and restart the shell
+
 ----------------------------------------------	
-	https://github.com/souvikinator/lsx
-	If you liked the project, then feel free to drop a star :)
+
+https://github.com/souvikinator/lsx
+If you liked the project, then feel free to drop a star :)
 END

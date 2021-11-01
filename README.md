@@ -26,7 +26,7 @@
 
 # ❓ Why?
 
-It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal. **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory.
+It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal (*this maybe subjective*). **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory.
 
 # 💻 Demo
 

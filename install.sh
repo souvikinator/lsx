@@ -24,10 +24,6 @@ fi
 
 # bash
 cp "script/lsx.sh" "$HOME/.config/lsx/lsx.sh"
-if [[ -d "$HOME/.config/fish/functions" ]];then
-  cp "script/lsx.fish" "$HOME/.config/fish/functions/lsx.fish"
-fi
-
 
 #zsh
 if [[ -d "$ZSH_DIR" ]];then

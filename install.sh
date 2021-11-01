@@ -47,11 +47,11 @@ echo "INFO: build Success!"
 
 cat <<-END
 
-ZSH users, use following command:
+ZSH users, add following line at the end of .zshrc 
 
 		autoload -Uz lsx
 
-BASH users, add following line at the end of .bashrc:  
+BASH users, add following line at the end of .bashrc 
 
 		source ~/.config/lsx/lsx.sh
 

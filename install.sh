@@ -17,6 +17,10 @@ if ! [[ -d "$HOME/.config/lsx" ]];then
 fi
 
 cp "script/lsx.sh" "$HOME/.config/lsx/lsx.sh"
+if [[ -d "$HOME/.config/fish/functions" ]];then
+  cp "script/lsx.fish" "$HOME/.config/fish/functions/lsx.fish"
+fi
+
 
 # build
 go build -o "$GOPATH/bin/ls-x"

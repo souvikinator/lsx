@@ -44,7 +44,7 @@ func (app *Lsx) Init() {
 	app.FileMode = false
 	app.LinkMode = false
 
-	app.Version = "v0.1.3"
+	app.Version = "v0.1.4"
 	home := utils.HomeDir()
 	app.ConfigDir = filepath.Join(home, ".config", "lsx")
 	app.AliasFile = filepath.Join(app.ConfigDir, "alias.yaml")

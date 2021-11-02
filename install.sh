@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 
+BASHRC="$HOME/.bashrc"
+
+ZSHRC="$HOME/.zshrc"
 ZSH_DIR="$HOME/.oh-my-zsh"
 ZSH_FUNC_DIR="$ZSH_DIR/functions"
 
 FISH_DIR="$HOME/.config/fish"
 FISH_FUNC_DIR="$FISH_DIR/functions"
-
-# git installed?
-if ! [[ -x "$(command -v git)" ]];then
-	echo "ERROR: Git not installed!"
-	exit 1
-fi
 
 # go installed?
 if ! [[ -x "$(command -v go)" ]];then
@@ -41,20 +38,22 @@ go build -o "$GOPATH/bin/ls-x"
 
 echo "INFO: build Success!"
 
-cat <<-END
+# add line to bashrc if exists
+if [[ -f "$BASHRC" ]];then
+	if ! [[ $(grep -e "source ~/.config/lsx/lsx.sh" "$BASHRC") ]];then
+		echo "INFO: Adding 'source ~/.config/lsx/lsx.sh' in $BASHRC"
+		echo "#lsx" >> "$BASHRC"
+		echo "source ~/.config/lsx/lsx.sh" >> "$BASHRC"
+	fi
+fi
 
-ZSH users, add following line at the end of .zshrc 
+# add line to zshrc if exists
+if [[ -f "$ZSHRC" ]];then
+	if ! [[ $(grep -e "autoload -Uz lsx" "$ZSHRC") ]];then
+		echo "INFO: Adding 'autoload -Uz lsx' in $ZSHRC"
+		echo "#lsx" >> "$ZSHRC"
+		echo "autoload -Uz lsx" >> "$ZSHRC"
+	fi
+fi
 
-		autoload -Uz lsx
-
-BASH users, add following line at the end of .bashrc 
-
-		source ~/.config/lsx/lsx.sh
-
-and restart the shell
-
-----------------------------------------------	
-
-https://github.com/souvikinator/lsx
-If you liked the project, then feel free to drop a star :)
-END
+echo "All set! Restart your terminal."

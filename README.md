@@ -86,14 +86,6 @@ lsx remove-alias aliasname
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
 
-# 📋 Todo
-
-- [x] make a logo
-- [ ] add icons
-- [x] `-a`/`--all` mode
-- [x] search
-- [x] allow User can navigate to previous directory from the one they started ([#1](https://github.com/souvikinator/lsx/issues/))
-
 # ⚗️ Install
 
 > ## **Note**: make sure to have Go installed and your GOPATH is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
@@ -112,15 +104,15 @@ Clone the repo:
 
 > `./install.sh`
 
-after installation is successful, add the following line at the end of your **current running shell resource file** (.zhsrc, .bashrc ...)
+and you are ready to go, restart your terminal. Enjoy!
 
-> `source ~/.config/lsx/lsx.sh`
+**Note**: **zsh**, **bash** and **fish** shell users just need to run the installation script and lsx will be ready to use. In case the command is not working add following line at the end of your shell resource file (`.bashrc`, `.zshrc`...):
 
-and restart your terminal. Enjoy!
+`source ~/.config/lsx/lsx.sh`
 
-**Note**: Feel free to open an issue if any problems faced during installation.
+and then restart your terminal
 
-If you liked the project, feel free to drop a star :)
+**open an issue if still facing installation problems**
 
 # 🐜 Contribution
 

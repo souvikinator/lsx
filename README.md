@@ -114,6 +114,21 @@ and then restart your terminal
 
 **open an issue if still facing installation problems**
 
+## How to update?
+
+Go inside the cloned directory and add use following command:
+
+```bash
+git pull origin master
+```
+
+and then:
+
+```bash
+./install.sh
+```
+restart your terminal and you are good to go.
+
 # 🐜 Contribution
 
 You can improve this project by contributing in following ways:

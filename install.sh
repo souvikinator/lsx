@@ -36,7 +36,12 @@ fi
 # build
 go build -o "$GOPATH/bin/ls-x"
 
-echo "INFO: build Success!"
+if [ $? -ne 0 ];then
+  echo "ERROR: build Failure!"
+  exit 1
+else
+  echo "INFO: build Success!"
+fi
 
 # add line to bashrc if exists
 if [[ -f "$BASHRC" ]];then

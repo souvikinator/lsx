@@ -5,40 +5,12 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/gookit/color"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
-
-type Filepath struct {
-	parts []string
-	root  string
-}
-
-func (fp *Filepath) String() string {
-	return filepath.Clean(fp.root + strings.Join(fp.parts, string(os.PathSeparator)))
-}
-
-func (fp *Filepath) To(path string) {
-	if filepath.IsAbs(path) {
-		fp.root = filepath.VolumeName(path) + string(os.PathSeparator)
-		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
-	} else if path == ".." {
-		if len(fp.parts) == 0 {
-			return
-		}
-		fp.parts = fp.parts[:len(fp.parts)-1]
-	} else {
-		fp.parts = append(fp.parts, path)
-	}
-
-}
-
-/*******misc utility functions******/
 
 func HomeDir() string {
 	home, err := os.UserHomeDir()
@@ -94,14 +66,6 @@ func CheckError(err error) {
 	}
 }
 
-func IsKeyboardInterrupt(err error) bool {
-	return fmt.Sprint(err) == "^C"
-}
-
-func GetOs() string {
-	return runtime.GOOS
-}
-
 func Chdir(path string) {
 	cmd := exec.Command("cd", path)
 	cmd.Stdout = os.Stdout
@@ -109,19 +73,19 @@ func Chdir(path string) {
 	cmd.Run()
 }
 
-func ClearScreen(Os string) {
-	if Os == "windows" {
-		cmd := exec.Command("cmd", "/c", "cls")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
-	} else {
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
-	}
-}
+// func ClearScreen(Os string) {
+// 	if Os == "windows" {
+// 		cmd := exec.Command("cmd", "/c", "cls")
+// 		cmd.Stdout = os.Stdout
+// 		cmd.Stderr = os.Stderr
+// 		cmd.Run()
+// 	} else {
+// 		cmd := exec.Command("clear")
+// 		cmd.Stdout = os.Stdout
+// 		cmd.Stderr = os.Stderr
+// 		cmd.Run()
+// 	}
+// }
 
 func PathExists(path string) bool {
 	_, err := os.Stat(path)
@@ -132,34 +96,14 @@ func PathExists(path string) bool {
 	return true
 }
 
-func PathIsFile(path string) bool {
-	fileInfo, err := os.Stat(path)
-	CheckError(err)
-	return !fileInfo.IsDir()
-}
-
 func PathIsDir(path string) bool {
 	fileInfo, err := os.Stat(path)
 	CheckError(err)
 	return fileInfo.IsDir()
 }
 
-func PathIsLink(path string) bool {
-	abs, err := filepath.Abs(path)
-	CheckError(err)
-	src, _ := filepath.EvalSymlinks(path)
-	return src != abs
-}
-
 func IsDotFile(filename string) bool {
 	return strings.HasPrefix(filename, ".")
-}
-
-func ResolveLink(path string) string {
-	absPath, err := filepath.Abs(path)
-	CheckError(err)
-	src, _ := filepath.EvalSymlinks(absPath)
-	return src
 }
 
 func Err(msg string) {

@@ -1,16 +1,119 @@
 package cmd
 
 import (
+	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
-	"github.com/manifoldco/promptui"
+	"github.com/charmbracelet/bubbles/list"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/souvikinator/lsx/lsx"
 	"github.com/souvikinator/lsx/utils"
 	"github.com/spf13/cobra"
 )
 
 var App lsx.Lsx
+var currentPath string
+
+/*UI*/
+
+const listHeight = 20
+const defaultWidth = 50
+
+var (
+	titleStyle        = lipgloss.NewStyle().MarginLeft(1).Italic(true).Foreground(lipgloss.Color("#61D1C2")).Bold(true).MaxWidth(100)
+	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
+	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#7E6CFA")).Bold(true)
+	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
+	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(0)
+)
+
+type item string
+
+func (i item) FilterValue() string { return string(i) }
+
+type itemDelegate struct{}
+
+func (d itemDelegate) Height() int                               { return 1 }
+func (d itemDelegate) Spacing() int                              { return 0 }
+func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
+func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(item)
+	if !ok {
+		return
+	}
+
+	str := string(i)
+
+	fn := itemStyle.Render
+	if index == m.Index() {
+		fn = func(s string) string {
+			return selectedItemStyle.Render("> " + s)
+		}
+	}
+
+	fmt.Fprintf(w, fn(str))
+}
+
+type Model struct {
+	list   list.Model
+	choice string
+}
+
+func (m Model) Init() tea.Cmd {
+	return nil
+}
+
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+
+		if msg.String() == "ctrl+c" {
+			// TODO: write to file
+			return m, tea.Quit
+		}
+		// TODO: can't go before /home/souvikinator
+		if msg.String() == "enter" {
+			i, ok := m.list.SelectedItem().(item)
+			home, _ := os.UserHomeDir()
+			if ok {
+				m.choice = filepath.Join(m.choice, string(i))
+				var items []list.Item
+				m.list.Title = fmt.Sprintf("📌 %s", strings.Replace(m.choice, home, "~", -1))
+				App.ClearDirs()
+				App.GetPathContent(m.choice)
+				dirs := App.GetDirs()
+				if !App.AllMode {
+					dirs = utils.GetNonDotDirs(dirs)
+				}
+
+				items = append(items, item(".."))
+				for _, f := range dirs {
+					items = append(items, item(f))
+				}
+				m.list.SetItems(items)
+			}
+			return m, nil
+		}
+	}
+
+	var cmd tea.Cmd
+	m.list, cmd = m.list.Update(msg)
+	return m, cmd
+}
+
+func (m Model) View() string {
+	if m.choice != "" {
+		return m.list.View()
+	}
+	return "\n" + m.list.View()
+}
+
+/*UI End*/
+//FIXME: lsx error: some error occured stat /home/souvikinator/.test: no such file or directory
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -22,7 +125,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		home := utils.HomeDir()
-		platform := utils.GetOs()
+		var items []list.Item
 
 		App.AllMode, _ = cmd.Flags().GetBool("all")
 
@@ -30,77 +133,45 @@ var rootCmd = &cobra.Command{
 		if len(args) > 0 {
 			pathAlias := args[0]
 			ChdirToAlias(pathAlias)
-			utils.ClearScreen(platform)
 			os.Exit(0)
 		}
-		// if no args then prompt the user
-		templates := &promptui.SelectTemplates{
-			Label:    "📍 {{ . | magenta | italic | underline }}:",
-			Active:   "⯈ {{ . | green | bold | italic }}",
-			Inactive: "  {{ . | cyan | bold }}",
-			Details: `
-_______________________________
-{{ ".." | magenta }}	{{ ": previous dir" | faint }}
-{{ "ctrl+c" | magenta }}	{{ ": exit" | faint }}
-`,
+
+		currentPath, _ = os.Getwd()
+
+		// get all the directories from the current path
+		// App.ClearDirs() TODO: in Update()
+		App.GetPathContent(currentPath)
+
+		dirs := App.GetDirs()
+		// remove all directories starting with .
+		// if -a/--all is not used
+		if !App.AllMode {
+			dirs = utils.GetNonDotDirs(dirs)
 		}
 
-		var currentPath utils.Filepath
-
-		if p, err := os.Getwd(); err != nil {
-			panic(err)
-		} else {
-			currentPath.To(p)
+		items = append(items, item(".."))
+		for _, f := range dirs {
+			items = append(items, item(f))
 		}
 
-		utils.ClearScreen(platform)
-		for {
-			// get all the directories from the current path
-			App.ClearDirs()
-			App.GetPathContent(currentPath.String())
+		// currentPath = filepath.Join(currentPath, selectedDir)
+		l := list.NewModel(items, itemDelegate{}, defaultWidth, listHeight)
+		l.SetShowStatusBar(true)
+		l.SetFilteringEnabled(true)
+		//TODO: add style for status bar
+		l.Styles.Title = titleStyle
+		l.Styles.PaginationStyle = paginationStyle
+		l.Styles.HelpStyle = helpStyle
 
-			dirs := App.GetDirs()
-			// remove all directories starting with .
-			// if -a/--all is not used
-			if !App.AllMode {
-				dirs = utils.GetNonDotDirs(dirs)
-			}
+		m := Model{list: l, choice: currentPath}
+		m.list.Title = fmt.Sprintf("📌 %s", strings.Replace(currentPath, home, "~", -1))
 
-			dirs = append([]string{".."}, dirs...)
+		p := tea.NewProgram(m)
+		p.EnterAltScreen()
 
-			searcher := func(input string, index int) bool {
-				dir := dirs[index]
-				name := strings.Replace(strings.ToLower(dir), " ", "", -1)
-				input = strings.Replace(strings.ToLower(input), " ", "", -1)
-
-				return strings.Contains(name, input)
-			}
-
-			prompt := promptui.Select{
-				Label:        strings.Replace(currentPath.String(), home, "~", -1),
-				Items:        dirs,
-				Templates:    templates,
-				Size:         11,
-				Searcher:     searcher,
-				HideSelected: true,
-			}
-			_, selectedDir, err := prompt.Run()
-
-			// handle ctrl+c and error
-			if err != nil {
-				if utils.IsKeyboardInterrupt(err) {
-
-					//write currentPath to temp file
-					//for use after the process ends
-					utils.WriteToFile(App.TempFile, currentPath.String())
-					utils.ClearScreen(platform)
-					os.Exit(0)
-				}
-				utils.CheckError(err)
-			}
-
-			currentPath.To(selectedDir)
-
+		if err := p.Start(); err != nil {
+			fmt.Println("Error running program:", err)
+			os.Exit(1)
 		}
 
 	},

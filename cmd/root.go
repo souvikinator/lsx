@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -34,15 +35,12 @@ var rootCmd = &cobra.Command{
 			os.Exit(0)
 		}
 		// if no args then prompt the user
+		// #61D1C2  #7E6CFA how to use these bruh!?
 		templates := &promptui.SelectTemplates{
-			Label:    "📍 {{ . | magenta | italic | underline }}:",
-			Active:   "⯈ {{ . | green | bold | italic }}",
-			Inactive: "  {{ . | cyan | bold }}",
-			Details: `
-_______________________________
-{{ ".." | magenta }}	{{ ": previous dir" | faint }}
-{{ "ctrl+c" | magenta }}	{{ ": exit" | faint }}
-`,
+			Label:    "📌 {{ . | magenta | italic | underline }}:",
+			Active:   "> {{ . | yellow | bold }}",
+			Inactive: "  {{ . | cyan }}",
+			Help:     `{{ " ctrl+c to exit and ↑ ↓ → ← or h,j,k,l to navigate" | faint }}`,
 		}
 
 		var currentPath utils.Filepath
@@ -77,7 +75,7 @@ _______________________________
 			}
 
 			prompt := promptui.Select{
-				Label:        strings.Replace(currentPath.String(), home, "~", -1),
+				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath.String(), home, "~", -1), len(dirs)-1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,

@@ -36,7 +36,7 @@ fi
 # build
 go build -o "$GOPATH/bin/ls-x"
 
-if [ $? -ne 0 ];then
+if [[ $? -ne 0 ]];then
   echo "ERROR: build Failure!"
   exit 1
 else

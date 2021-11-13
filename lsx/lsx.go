@@ -10,18 +10,10 @@ import (
 )
 
 type Lsx struct {
-	raw       []string
 	directory []string
-	file      []string
-	links     map[string]string
-	misc      []string
-	// executables []string
 
 	// modes
-	DirMode  bool
-	FileMode bool
-	LinkMode bool
-	AllMode  bool
+	AllMode bool
 
 	Version   string
 	ConfigDir string
@@ -33,16 +25,9 @@ type Lsx struct {
 
 func (app *Lsx) Init() {
 	//data
-	app.raw = make([]string, 0)
 	app.directory = make([]string, 0)
-	app.file = make([]string, 0)
-	app.misc = make([]string, 0)
-	app.links = make(map[string]string)
 	app.Alias = make(map[string]string)
 	app.AllMode = false
-	app.DirMode = false
-	app.FileMode = false
-	app.LinkMode = false
 
 	app.Version = "v0.1.4"
 	home := utils.HomeDir()
@@ -63,7 +48,7 @@ func (app *Lsx) Init() {
 }
 
 func (app *Lsx) NoFlagPassed() bool {
-	return (!app.AllMode && !app.DirMode && !app.FileMode && !app.LinkMode)
+	return (!app.AllMode)
 }
 
 func (app *Lsx) GetPathContent(path string) {
@@ -76,22 +61,9 @@ func (app *Lsx) GetPathContent(path string) {
 		fileName := f.Name()
 		absPath, _ := filepath.Abs(filepath.Join(path, fileName))
 
-		if utils.PathIsLink(absPath) {
-			src := utils.ResolveLink(absPath)
-			app.links[fileName] = src
-
-		} else if utils.PathIsDir(absPath) {
+		if !utils.PathIsLink(absPath) && utils.PathIsDir(absPath) {
 			app.directory = append(app.directory, fileName)
-
-		} else if !utils.PathIsDir(absPath) {
-			app.file = append(app.file, fileName)
-
-		} else {
-			app.misc = append(app.misc, fileName)
-
 		}
-
-		app.raw = append(app.raw, fileName)
 	}
 }
 
@@ -101,36 +73,4 @@ func (app *Lsx) GetDirs() []string {
 
 func (app *Lsx) ClearDirs() {
 	app.directory = make([]string, 0)
-}
-
-func (app *Lsx) GetFiles() []string {
-	return app.file
-}
-
-func (app *Lsx) ClearFiles() {
-	app.file = nil
-}
-
-func (app *Lsx) GetLinks() map[string]string {
-	return app.links
-}
-
-func (app *Lsx) ClearLinks() {
-	app.links = nil
-}
-
-func (app *Lsx) GetMisc() []string {
-	return app.misc
-}
-
-func (app *Lsx) ClearMisc() {
-	app.misc = nil
-}
-
-func (app *Lsx) GetRaw() []string {
-	return app.raw
-}
-
-func (app *Lsx) ClearRaw() {
-	app.raw = nil
 }

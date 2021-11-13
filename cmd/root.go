@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/manifoldco/promptui"
@@ -43,19 +44,16 @@ var rootCmd = &cobra.Command{
 			Help:     `{{ " ctrl+c to exit and ↑ ↓ → ← or h,j,k,l to navigate" | faint }}`,
 		}
 
-		var currentPath utils.Filepath
+		var currentPath string
 
-		if p, err := os.Getwd(); err != nil {
-			panic(err)
-		} else {
-			currentPath.To(p)
-		}
+		currentPath, err := os.Getwd()
+		utils.CheckError(err)
 
 		utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
 			App.ClearDirs()
-			App.GetPathContent(currentPath.String())
+			App.GetPathContent(currentPath)
 
 			dirs := App.GetDirs()
 			// remove all directories starting with .
@@ -75,7 +73,7 @@ var rootCmd = &cobra.Command{
 			}
 
 			prompt := promptui.Select{
-				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath.String(), home, "~", -1), len(dirs)-1),
+				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath, home, "~", -1), len(dirs)-1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,
@@ -87,18 +85,16 @@ var rootCmd = &cobra.Command{
 			// handle ctrl+c and error
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
-
 					//write currentPath to temp file
 					//for use after the process ends
-					utils.WriteToFile(App.TempFile, currentPath.String())
+					utils.WriteToFile(App.TempFile, currentPath)
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
 				utils.CheckError(err)
 			}
 
-			currentPath.To(selectedDir)
-
+			currentPath = filepath.Join(currentPath, selectedDir)
 		}
 
 	},

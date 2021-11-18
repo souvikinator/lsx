@@ -11,7 +11,6 @@ import (
 
 	"github.com/gookit/color"
 	"golang.org/x/term"
-	"gopkg.in/yaml.v3"
 )
 
 type Filepath struct {
@@ -62,24 +61,38 @@ func GetTerminalHeight() int {
 	return height
 }
 
-func ReadYamlFile(filepath string, data *map[string]string) {
-	f, err := ioutil.ReadFile(filepath)
-	CheckError(err)
-	err = yaml.Unmarshal([]byte(f), data)
-	CheckError(err)
-}
+// func ReadAccessRecordFile(filepath string, data *map[string][]int64) {
+// 	f, err := ioutil.ReadFile(filepath)
+// 	CheckError(err)
+// 	err = yaml.Unmarshal([]byte(f), data)
+// 	CheckError(err)
+// }
+
+// func WriteAccessRecordFile(filepath string, data map[string][]int64) {
+// 	d, err := yaml.Marshal(data)
+// 	CheckError(err)
+// 	err = ioutil.WriteFile(filepath, d, 0644)
+// 	CheckError(err)
+// }
+
+// func ReadAliasFile(filepath string, data *map[string]string) {
+// 	f, err := ioutil.ReadFile(filepath)
+// 	CheckError(err)
+// 	err = yaml.Unmarshal([]byte(f), data)
+// 	CheckError(err)
+// }
+
+// func WriteAliasFile(filepath string, data map[string]string) {
+// 	d, err := yaml.Marshal(data)
+// 	CheckError(err)
+// 	err = ioutil.WriteFile(filepath, d, 0644)
+// 	CheckError(err)
+// }
 
 func CreateFile(filepath string) {
 	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0666)
 	CheckError(err)
 	defer f.Close()
-}
-
-func WriteYamlFile(filepath string, data map[string]string) {
-	d, err := yaml.Marshal(data)
-	CheckError(err)
-	err = ioutil.WriteFile(filepath, d, 0644)
-	CheckError(err)
 }
 
 func WriteToFile(filepath, data string) {

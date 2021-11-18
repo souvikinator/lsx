@@ -59,7 +59,7 @@ var setAliasCmd = &cobra.Command{
 
 		// all good. update alias file
 		App.Alias[pathName] = dirPath
-		utils.WriteYamlFile(App.AliasFile, App.Alias)
+		App.WriteAliasFile()
 		utils.Info("done")
 	},
 }

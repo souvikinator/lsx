@@ -95,6 +95,7 @@ var rootCmd = &cobra.Command{
 			}
 
 			currentPath = filepath.Join(currentPath, selectedDir)
+			// TODO: record hit count and last access time in access record for selectedDir
 		}
 
 	},

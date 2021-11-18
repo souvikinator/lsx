@@ -48,6 +48,6 @@ func deleteAlias(name string) {
 	}
 
 	delete(App.Alias, name)
-	utils.WriteYamlFile(App.AliasFile, App.Alias)
+	App.WriteAliasFile()
 
 }

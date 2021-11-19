@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
-	"golang.org/x/term"
 )
 
 type Filepath struct {
@@ -55,10 +54,19 @@ func GetNonDotDirs(dirs []string) []string {
 	return nonDotDirs
 }
 
-func GetTerminalHeight() int {
-	_, height, err := term.GetSize(0)
-	CheckError(err)
-	return height
+func Remove(s []string, i int) []string {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
+}
+
+func GetAbsPathSlice(paths []string) []string {
+	tmp := make([]string, 0)
+	for _, dir := range paths {
+		absPath, err := filepath.Abs(dir)
+		CheckError(err)
+		tmp = append(tmp, absPath)
+	}
+	return tmp
 }
 
 // func ReadAccessRecordFile(filepath string, data *map[string][]int64) {

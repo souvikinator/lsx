@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/souvikinator/lsx/utils"
@@ -62,7 +63,6 @@ func (app *Lsx) Init() {
 
 	app.ReadAliasFile()
 	app.ReadAccessRecordFile()
-
 }
 
 func (app *Lsx) NoFlagPassed() bool {
@@ -106,12 +106,29 @@ func (app *Lsx) SortFrecencyRecord() {
 // sorts directory as per frecency scores
 func (app *Lsx) GetDirs() []string {
 	rankedDirList := make([]string, 0)
-	if len(app.FrecencyRecords) < 1 {
+	cwd, _ := os.Getwd()
+
+	if len(app.AccessRecordFile) < 1 || len(app.directory) < 1 {
 		return app.directory
 	}
-	//calculate frecency scores
 	app.CalculateFrecency()
+
 	//TODO: how to sort dirs as per ranks
+	// abs path in app.directory
+	absPathDirs := utils.GetAbsPathSlice(app.directory)
+	for _, ob := range app.FrecencyRecords {
+		i := sort.SearchStrings(absPathDirs, ob.key)
+		if i < len(absPathDirs) && ob.key == absPathDirs[i] {
+			//remove absPath from directory
+			rankedDirList = append(rankedDirList, strings.ReplaceAll(absPathDirs[i], cwd, ""))
+			//remove from absPathDirs
+			absPathDirs = utils.Remove(absPathDirs, i)
+		}
+	}
+	//merge remaining absPathDirs to rankedDirList
+	for _, dir := range rankedDirList {
+		rankedDirList = append(rankedDirList, strings.ReplaceAll(dir, cwd, ""))
+	}
 	return rankedDirList
 }
 
@@ -129,14 +146,14 @@ func (app *Lsx) WriteAliasFile() {
 func (app *Lsx) ReadAliasFile() {
 	f, err := ioutil.ReadFile(app.AliasFile)
 	utils.CheckError(err)
-	err = yaml.Unmarshal([]byte(f), app.Alias)
+	err = yaml.Unmarshal([]byte(f), &app.Alias)
 	utils.CheckError(err)
 }
 
 func (app *Lsx) ReadAccessRecordFile() {
 	f, err := ioutil.ReadFile(app.AccessRecordFile)
 	utils.CheckError(err)
-	err = yaml.Unmarshal([]byte(f), app.AccessRecords)
+	err = yaml.Unmarshal([]byte(f), &app.AccessRecords)
 	utils.CheckError(err)
 }
 

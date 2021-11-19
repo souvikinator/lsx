@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/manifoldco/promptui"
 	"github.com/souvikinator/lsx/lsx"
@@ -49,7 +50,7 @@ var rootCmd = &cobra.Command{
 		currentPath, err := os.Getwd()
 		utils.CheckError(err)
 
-		utils.ClearScreen(platform)
+		//TODO: utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
 			App.ClearDirs()
@@ -88,6 +89,8 @@ var rootCmd = &cobra.Command{
 					//write currentPath to temp file
 					//for use after the process ends
 					utils.WriteToFile(App.TempFile, currentPath)
+					// write to access record file
+					App.WriteAccessRecordFile()
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
@@ -96,6 +99,12 @@ var rootCmd = &cobra.Command{
 
 			currentPath = filepath.Join(currentPath, selectedDir)
 			// TODO: record hit count and last access time in access record for selectedDir
+			stats, exists := App.AccessRecords[currentPath]
+			if !exists {
+				App.AccessRecords[currentPath] = []int64{1, time.Now().Unix()}
+			} else {
+				App.AccessRecords[currentPath] = []int64{stats[0] + 1, time.Now().Unix()}
+			}
 		}
 
 	},

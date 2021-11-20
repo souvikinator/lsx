@@ -21,7 +21,7 @@ type entry struct {
 type entries []entry
 type Lsx struct {
 	directory []string
-
+	activeDir string
 	// modes
 	AllMode bool
 
@@ -38,10 +38,11 @@ type Lsx struct {
 }
 
 func (app *Lsx) Init() {
-	//data
+	app.directory = make([]string, 0)
+	app.activeDir = ""
+
 	app.AllMode = false
 	app.Version = "v0.1.5"
-	app.directory = make([]string, 0)
 	app.Alias = make(map[string]string)
 	app.AccessRecords = make(map[string][]int64)
 	app.FrecencyRecords = make(entries, 0)
@@ -70,6 +71,7 @@ func (app *Lsx) NoFlagPassed() bool {
 }
 
 func (app *Lsx) GetPathContent(path string) {
+	app.ClearDirs()
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
 		log.Fatal(err)
@@ -83,6 +85,7 @@ func (app *Lsx) GetPathContent(path string) {
 			app.directory = append(app.directory, fileName)
 		}
 	}
+	app.activeDir = path
 }
 
 func (app *Lsx) CalculateFrecency() {
@@ -104,31 +107,42 @@ func (app *Lsx) SortFrecencyRecord() {
 }
 
 // sorts directory as per frecency scores
+// FIXME: not sorting all the dirs
 func (app *Lsx) GetDirs() []string {
 	rankedDirList := make([]string, 0)
-	cwd, _ := os.Getwd()
+
+	// not the actual cwd,
+	// cwd for the process
+	cwd := app.activeDir
 
 	if len(app.AccessRecordFile) < 1 || len(app.directory) < 1 {
 		return app.directory
 	}
+	//clear frequency record
+	app.FrecencyRecords = make(entries, 0)
+	// recalculate
 	app.CalculateFrecency()
-
-	//TODO: how to sort dirs as per ranks
-	// abs path in app.directory
-	absPathDirs := utils.GetAbsPathSlice(app.directory)
+	// fmt.Println("fr:", app.FrecencyRecords)
+	absPathDirs := utils.GetAbsPathSlice(cwd, app.directory)
+	// fmt.Println("absPathDirs: ", absPathDirs)
 	for _, ob := range app.FrecencyRecords {
 		i := sort.SearchStrings(absPathDirs, ob.key)
+		// fmt.Println(">>", i, ob.key)
 		if i < len(absPathDirs) && ob.key == absPathDirs[i] {
 			//remove absPath from directory
-			rankedDirList = append(rankedDirList, strings.ReplaceAll(absPathDirs[i], cwd, ""))
+			rankedDirList = append(rankedDirList, strings.ReplaceAll(absPathDirs[i], cwd+"/", ""))
 			//remove from absPathDirs
 			absPathDirs = utils.Remove(absPathDirs, i)
+			// fmt.Println(">>", absPathDirs)
+			// fmt.Println("<<", rankedDirList)
 		}
 	}
+	// fmt.Println("absPathDirs(after): ", absPathDirs)
 	//merge remaining absPathDirs to rankedDirList
-	for _, dir := range rankedDirList {
-		rankedDirList = append(rankedDirList, strings.ReplaceAll(dir, cwd, ""))
+	for _, dir := range absPathDirs {
+		rankedDirList = append(rankedDirList, strings.ReplaceAll(dir, cwd+"/", ""))
 	}
+	// fmt.Println("rankedDirList: ", rankedDirList)
 	return rankedDirList
 }
 

@@ -59,11 +59,10 @@ func Remove(s []string, i int) []string {
 	return s[:len(s)-1]
 }
 
-func GetAbsPathSlice(paths []string) []string {
+func GetAbsPathSlice(root string, paths []string) []string {
 	tmp := make([]string, 0)
 	for _, dir := range paths {
-		absPath, err := filepath.Abs(dir)
-		CheckError(err)
+		absPath := filepath.Join(root, dir)
 		tmp = append(tmp, absPath)
 	}
 	return tmp

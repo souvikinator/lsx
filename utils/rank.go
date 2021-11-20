@@ -7,7 +7,7 @@ import (
 // half life of 1week(7days===604800)
 // need it in seconds or days?
 // we'll find out which one works
-const halflife int = 7
+const halflife int = 604800
 
 // half-life decay
 // decay_time=ln2 / lambda

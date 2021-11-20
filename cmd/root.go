@@ -53,7 +53,6 @@ var rootCmd = &cobra.Command{
 		//TODO: utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
-			App.ClearDirs()
 			App.GetPathContent(currentPath)
 
 			dirs := App.GetDirs()
@@ -62,7 +61,6 @@ var rootCmd = &cobra.Command{
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
-
 			dirs = append([]string{".."}, dirs...)
 
 			searcher := func(input string, index int) bool {

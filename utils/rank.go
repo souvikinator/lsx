@@ -4,9 +4,7 @@ import (
 	"math"
 )
 
-// half life of 1week(7days===604800)
-// need it in seconds or days?
-// we'll find out which one works
+// half life of 1week(7days===604800sec)
 const halflife int = 604800
 
 // half-life decay
@@ -16,9 +14,9 @@ func Lambda() float64 {
 	return math.Log(2) / float64(halflife)
 }
 
-// age= last_visited-time.Now() [-ve value]
-// freq_score= hits*e^(-lambda*age)
-// [-lambda to balance negative value]
-func FrecencyScore(hits, age int64) float64 {
-	return math.Round(float64(1000) * float64(hits) * math.Exp(-Lambda()*float64(age)))
+// age= current unix timestamp(in sec) - last accessed
+// frecency_score= 1000*hits*e^(-lambda*age)
+// each hits worth 1000 points
+func FrecencyScore(hits, age int64) int64 {
+	return int64(float64(1000) * float64(hits) * math.Exp(-Lambda()*float64(age)))
 }

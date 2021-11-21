@@ -50,7 +50,7 @@ var rootCmd = &cobra.Command{
 		currentPath, err := os.Getwd()
 		utils.CheckError(err)
 
-		//TODO: utils.ClearScreen(platform)
+		utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
 			App.GetPathContent(currentPath)
@@ -96,7 +96,7 @@ var rootCmd = &cobra.Command{
 			}
 
 			currentPath = filepath.Join(currentPath, selectedDir)
-			// TODO: record hit count and last access time in access record for selectedDir
+			//record hit count and last access time in access record for selectedDir
 			stats, exists := App.AccessRecords[currentPath]
 			if !exists {
 				App.AccessRecords[currentPath] = []int64{1, time.Now().Unix()}

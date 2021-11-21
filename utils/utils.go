@@ -10,33 +10,23 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
+	"gopkg.in/yaml.v3"
 )
 
-type Filepath struct {
-	parts []string
-	root  string
+func ReadYamlFile(filepath string, store *interface{}) {
+	f, err := ioutil.ReadFile(filepath)
+	CheckError(err)
+	err = yaml.Unmarshal([]byte(f), &store)
+	CheckError(err)
 }
 
-func (fp *Filepath) String() string {
-	return filepath.Clean(fp.root + strings.Join(fp.parts, string(os.PathSeparator)))
-}
-
-func (fp *Filepath) To(path string) {
-	if filepath.IsAbs(path) {
-		fp.root = filepath.VolumeName(path) + string(os.PathSeparator)
-		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
-	} else if path == ".." {
-		if len(fp.parts) == 0 {
-			return
-		}
-		fp.parts = fp.parts[:len(fp.parts)-1]
-	} else {
-		fp.parts = append(fp.parts, path)
-	}
+func WriteYamlFile(filepath string, data interface{}) {
+	d, err := yaml.Marshal(data)
+	CheckError(err)
+	err = ioutil.WriteFile(filepath, d, 0644)
+	CheckError(err)
 
 }
-
-/*******misc utility functions******/
 
 func HomeDir() string {
 	home, err := os.UserHomeDir()
@@ -67,34 +57,6 @@ func GetAbsPathSlice(root string, paths []string) []string {
 	}
 	return tmp
 }
-
-// func ReadAccessRecordFile(filepath string, data *map[string][]int64) {
-// 	f, err := ioutil.ReadFile(filepath)
-// 	CheckError(err)
-// 	err = yaml.Unmarshal([]byte(f), data)
-// 	CheckError(err)
-// }
-
-// func WriteAccessRecordFile(filepath string, data map[string][]int64) {
-// 	d, err := yaml.Marshal(data)
-// 	CheckError(err)
-// 	err = ioutil.WriteFile(filepath, d, 0644)
-// 	CheckError(err)
-// }
-
-// func ReadAliasFile(filepath string, data *map[string]string) {
-// 	f, err := ioutil.ReadFile(filepath)
-// 	CheckError(err)
-// 	err = yaml.Unmarshal([]byte(f), data)
-// 	CheckError(err)
-// }
-
-// func WriteAliasFile(filepath string, data map[string]string) {
-// 	d, err := yaml.Marshal(data)
-// 	CheckError(err)
-// 	err = ioutil.WriteFile(filepath, d, 0644)
-// 	CheckError(err)
-// }
 
 func CreateFile(filepath string) {
 	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0666)

@@ -26,11 +26,14 @@
 
 # ❓ Why?
 
-It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal (_this maybe subjective_). **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory. It also ranks your directories based on how often and how frequent you access them and placing them on top of the list to reduce searching and navigation time.
+It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal (_this maybe subjective_). **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory. 
+**It also ranks your directories based on how often and how frequent you access them and placing them on top of the list to reduce searching and navigation time.**
 
 # 💻 Demo
 
 > **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
+
+> **Notice how directories gets ranked in the list based on the frequency and recency of their access.**
 
 ## Navigate through terminal and perform search:
 

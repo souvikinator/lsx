@@ -4,6 +4,8 @@ import (
 	"math"
 )
 
+// Ref: https://wiki.mozilla.org/User:Jesse/NewFrecency
+
 // half life of 1week(7days===604800sec)
 const halflife int = 604800
 

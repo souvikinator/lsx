@@ -80,7 +80,7 @@ lsx alias
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
 
-## User **alias**
+## Use **alias**
 
 ```bash
 lsx somealias

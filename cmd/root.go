@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/manifoldco/promptui"
 	"github.com/souvikinator/lsx/lsx"
@@ -38,24 +40,20 @@ var rootCmd = &cobra.Command{
 		// #61D1C2  #7E6CFA how to use these bruh!?
 		templates := &promptui.SelectTemplates{
 			Label:    "📌 {{ . | magenta | italic | underline }}:",
-			Active:   "> {{ . | yellow | bold }}",
+			Active:   "> {{ . | green | bold }}",
 			Inactive: "  {{ . | cyan }}",
-			Help:     `{{ " ctrl+c to exit and ↑ ↓ → ← or h,j,k,l to navigate" | faint }}`,
+			Help:     `{{ "search: / exit: ctrl+c  navigate: ↑ ↓ → ← or h,j,k,l" | faint }}`,
 		}
 
-		var currentPath utils.Filepath
+		var currentPath string
 
-		if p, err := os.Getwd(); err != nil {
-			panic(err)
-		} else {
-			currentPath.To(p)
-		}
+		currentPath, err := os.Getwd()
+		utils.CheckError(err)
 
 		utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
-			App.ClearDirs()
-			App.GetPathContent(currentPath.String())
+			App.GetPathContent(currentPath)
 
 			dirs := App.GetDirs()
 			// remove all directories starting with .
@@ -63,7 +61,6 @@ var rootCmd = &cobra.Command{
 			if !App.AllMode {
 				dirs = utils.GetNonDotDirs(dirs)
 			}
-
 			dirs = append([]string{".."}, dirs...)
 
 			searcher := func(input string, index int) bool {
@@ -75,7 +72,7 @@ var rootCmd = &cobra.Command{
 			}
 
 			prompt := promptui.Select{
-				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath.String(), home, "~", -1), len(dirs)-1),
+				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath, home, "~", -1), len(dirs)-1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,
@@ -87,18 +84,25 @@ var rootCmd = &cobra.Command{
 			// handle ctrl+c and error
 			if err != nil {
 				if utils.IsKeyboardInterrupt(err) {
-
 					//write currentPath to temp file
 					//for use after the process ends
-					utils.WriteToFile(App.TempFile, currentPath.String())
+					utils.WriteToFile(App.TempFile, currentPath)
+					// write to access record file
+					App.WriteAccessRecordFile()
 					utils.ClearScreen(platform)
 					os.Exit(0)
 				}
 				utils.CheckError(err)
 			}
 
-			currentPath.To(selectedDir)
-
+			currentPath = filepath.Join(currentPath, selectedDir)
+			//record hit count and last access time in access record for selectedDir
+			stats, exists := App.AccessRecords[currentPath]
+			if !exists {
+				App.AccessRecords[currentPath] = []int64{1, time.Now().Unix()}
+			} else {
+				App.AccessRecords[currentPath] = []int64{stats[0] + 1, time.Now().Unix()}
+			}
 		}
 
 	},

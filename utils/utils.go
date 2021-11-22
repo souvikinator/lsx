@@ -10,35 +10,23 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
-	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
 
-type Filepath struct {
-	parts []string
-	root  string
+func ReadYamlFile(filepath string, store *interface{}) {
+	f, err := ioutil.ReadFile(filepath)
+	CheckError(err)
+	err = yaml.Unmarshal([]byte(f), &store)
+	CheckError(err)
 }
 
-func (fp *Filepath) String() string {
-	return filepath.Clean(fp.root + strings.Join(fp.parts, string(os.PathSeparator)))
-}
-
-func (fp *Filepath) To(path string) {
-	if filepath.IsAbs(path) {
-		fp.root = filepath.VolumeName(path) + string(os.PathSeparator)
-		fp.parts = strings.Split(path[len(fp.root):], string(os.PathSeparator))
-	} else if path == ".." {
-		if len(fp.parts) == 0 {
-			return
-		}
-		fp.parts = fp.parts[:len(fp.parts)-1]
-	} else {
-		fp.parts = append(fp.parts, path)
-	}
+func WriteYamlFile(filepath string, data interface{}) {
+	d, err := yaml.Marshal(data)
+	CheckError(err)
+	err = ioutil.WriteFile(filepath, d, 0644)
+	CheckError(err)
 
 }
-
-/*******misc utility functions******/
 
 func HomeDir() string {
 	home, err := os.UserHomeDir()
@@ -56,30 +44,24 @@ func GetNonDotDirs(dirs []string) []string {
 	return nonDotDirs
 }
 
-func GetTerminalHeight() int {
-	_, height, err := term.GetSize(0)
-	CheckError(err)
-	return height
+func Remove(s []string, i int) []string {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
 }
 
-func ReadYamlFile(filepath string, data *map[string]string) {
-	f, err := ioutil.ReadFile(filepath)
-	CheckError(err)
-	err = yaml.Unmarshal([]byte(f), data)
-	CheckError(err)
+func GetAbsPathSlice(root string, paths []string) []string {
+	tmp := make([]string, 0)
+	for _, dir := range paths {
+		absPath := filepath.Join(root, dir)
+		tmp = append(tmp, absPath)
+	}
+	return tmp
 }
 
 func CreateFile(filepath string) {
 	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0666)
 	CheckError(err)
 	defer f.Close()
-}
-
-func WriteYamlFile(filepath string, data map[string]string) {
-	d, err := yaml.Marshal(data)
-	CheckError(err)
-	err = ioutil.WriteFile(filepath, d, 0644)
-	CheckError(err)
 }
 
 func WriteToFile(filepath, data string) {

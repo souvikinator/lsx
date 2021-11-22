@@ -26,7 +26,7 @@
 
 # ❓ Why?
 
-It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal (*this maybe subjective*). **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory.
+It's a pain to `cd` and `ls` multiple times to reach desired directory in terminal (_this maybe subjective_). **ls-Xtended (lsx)** solves this problem by allowing users to smoothly navigate and search directories on the go with just one command. It also allows to create alias for paths making it easier for users to remember the path to the desired directory.
 
 # 💻 Demo
 
@@ -55,7 +55,9 @@ lsx -a
 ```bash
 lsx set-alias -n somealias -p path/to/be/aliased
 ```
+
 or
+
 ```bash
 lsx set-alias --path-name somealias --path path/to/be/aliased
 ```
@@ -78,7 +80,15 @@ lsx alias
 
 ![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
 
-## Remove existing **alias** 
+## User **alias**
+
+```bash
+lsx somealias
+```
+
+![lsx](https://github.com/souvikinator/lsx/raw/master/assets/use-alias.gif)
+
+## Remove existing **alias**
 
 ```bash
 lsx remove-alias aliasname
@@ -127,6 +137,7 @@ and then:
 ```bash
 ./install.sh
 ```
+
 restart your terminal and you are good to go.
 
 # 🐜 Contribution
@@ -144,6 +155,6 @@ and any other way if not mentioned here.
 
 As of now the installation process is painful and the reason is a program runs as a child process in a terminal so eveything happens withing that child process. When we change the directory from go program the directory changes for that executable or to be specific "for that child process" and not of the shell. Which is why one needs to source a script in their shell resource file (`.zshrc`, `.bashrc`...).
 
-The script contains a bash function as a wrapper around the lsx binary to make the whole `cd` thing work. This is what is prevent lsx to be distributed using some package manager. 
+The script contains a bash function as a wrapper around the lsx binary to make the whole `cd` thing work. This is what is prevent lsx to be distributed using some package manager.
 
 If anyone can comeup with something then feel free to open issue.

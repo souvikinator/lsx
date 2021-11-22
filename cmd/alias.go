@@ -20,7 +20,7 @@ var aliasCmd = &cobra.Command{
 		}
 
 		for alias, p := range App.Alias {
-			color.Printf("* %s --> %s\n", color.Magenta.Render(alias), color.Yellow.Render(p))
+			color.Printf("%s --> %s\n", color.Magenta.Render(alias), color.Yellow.Render(p))
 		}
 		os.Exit(0)
 

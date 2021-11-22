@@ -8,7 +8,6 @@ import (
 const halflife int = 604800
 
 // half-life decay
-// decay_time=ln2 / lambda
 // => lambda = ln2/decay_time
 func Lambda() float64 {
 	return math.Log(2) / float64(halflife)

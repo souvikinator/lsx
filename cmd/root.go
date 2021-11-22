@@ -40,9 +40,9 @@ var rootCmd = &cobra.Command{
 		// #61D1C2  #7E6CFA how to use these bruh!?
 		templates := &promptui.SelectTemplates{
 			Label:    "📌 {{ . | magenta | italic | underline }}:",
-			Active:   "> {{ . | yellow | bold }}",
+			Active:   "> {{ . | green | bold }}",
 			Inactive: "  {{ . | cyan }}",
-			Help:     `{{ " ctrl+c to exit and ↑ ↓ → ← or h,j,k,l to navigate" | faint }}`,
+			Help:     `{{ "search: / exit: ctrl+c  navigate: ↑ ↓ → ← or h,j,k,l" | faint }}`,
 		}
 
 		var currentPath string

@@ -53,7 +53,7 @@ var rootCmd = &cobra.Command{
 		utils.ClearScreen(platform)
 		for {
 			// get all the directories from the current path
-			App.GetPathContent(currentPath)
+			App.LoadPathContent(currentPath)
 
 			dirs := App.GetDirs()
 			// remove all directories starting with .
@@ -65,14 +65,14 @@ var rootCmd = &cobra.Command{
 
 			searcher := func(input string, index int) bool {
 				dir := dirs[index]
-				name := strings.Replace(strings.ToLower(dir), " ", "", -1)
-				input = strings.Replace(strings.ToLower(input), " ", "", -1)
+				name := strings.ReplaceAll(strings.ToLower(dir), " ", "")
+				input = strings.ReplaceAll(strings.ToLower(input), " ", "")
 
 				return strings.Contains(name, input)
 			}
 
 			prompt := promptui.Select{
-				Label:        fmt.Sprintf("%s (%d)", strings.Replace(currentPath, home, "~", -1), len(dirs)-1),
+				Label:        fmt.Sprintf("%s (%d)", strings.ReplaceAll(currentPath, home, "~"), len(dirs)-1),
 				Items:        dirs,
 				Templates:    templates,
 				Size:         11,

@@ -21,10 +21,11 @@ lsx () {
 		true > "$TEMP_FILE"
 	else
 		if [[ "${ARGS[0]}" == "--help" ]];then
+			echo "$LSX_BANNER"
 			ls-x --help
 			return
 		else
-			ls-x ${ARGS[@]}
+			ls-x "${ARGS[@]}"
 			LSX_CWD=$(cat "$TEMP_FILE")
 			cd "$LSX_CWD"
 			true > "$TEMP_FILE"

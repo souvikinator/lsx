@@ -21,7 +21,7 @@ var setAliasCmd = &cobra.Command{
 - make sure the path provided is a directory which exists and the alias can only contain alphanumeric characters along with underscore and hyphens`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		if len(pathName) == 0 || len(dirPath) == 0 {
+		if pathName == "" || dirPath == "" {
 			utils.Warn(" alias and directory path not provided! use --path-name and --path respectively")
 			utils.Warn(" use  'lsx set-alias --help' to know more")
 			os.Exit(1)

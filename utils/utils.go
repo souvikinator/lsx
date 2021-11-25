@@ -59,7 +59,7 @@ func GetAbsPathSlice(root string, paths []string) []string {
 }
 
 func CreateFile(filepath string) {
-	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0600)
 	CheckError(err)
 	defer f.Close()
 }

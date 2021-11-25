@@ -70,7 +70,7 @@ func (app *Lsx) NoFlagPassed() bool {
 	return (!app.AllMode)
 }
 
-func (app *Lsx) GetPathContent(path string) {
+func (app *Lsx) LoadPathContent(path string) {
 	app.ClearDirs()
 	files, err := ioutil.ReadDir(path)
 	if err != nil {

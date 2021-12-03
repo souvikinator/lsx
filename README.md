@@ -19,7 +19,7 @@
 
 <p align="center">
 	<a href="#-Demo">💻 Demo</a> •
-  <a href="#%EF%B8%8F-install">⚗️ Installation</a> •
+  <a href="#%EF%B8%8F-install">⚗️ Install & Update</a> •
 	<a href="#-contribution">🐜 Contribution</a> •
 	<a href="#known-issues"> ❗Known Issues </a>
 </p>

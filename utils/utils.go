@@ -45,8 +45,7 @@ func GetNonDotDirs(dirs []string) []string {
 }
 
 func Remove(s []string, i int) []string {
-	s[i] = s[len(s)-1]
-	return s[:len(s)-1]
+	return append(s[:i], s[i+1:]...)
 }
 
 func GetAbsPathSlice(root string, paths []string) []string {
@@ -69,9 +68,10 @@ func WriteToFile(filepath, data string) {
 	CheckError(err)
 }
 
-func CheckError(err error) {
+func CheckError(err error, msg ...interface{}) {
 	if err != nil {
-		fmt.Printf("lsx error: some error occured %v\n", err)
+		fmt.Println(msg...)
+		fmt.Printf("lsx error: some error occured\n %v\n", err)
 		os.Exit(1)
 	}
 }

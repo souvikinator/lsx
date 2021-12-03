@@ -97,7 +97,7 @@ func (app *Lsx) CalculateFrecency() {
 
 		// remove entry from accress records if score<1 or
 		// the directory does not exist
-		if score < 1 || !utils.PathIsDir(dir) {
+		if score < 1 || !utils.PathExists(dir) {
 			delete(app.AccessRecords, dir)
 			continue
 		}
@@ -133,16 +133,15 @@ func (app *Lsx) GetDirs() []string {
 	// fmt.Println("fr:", app.FrecencyRecords)
 	absPathDirs := utils.GetAbsPathSlice(cwd, app.directory)
 
-	for _, ob := range app.FrecencyRecords {
+	tmpFrecencyRecords := app.FrecencyRecords
+
+	for _, ob := range tmpFrecencyRecords {
 
 		i := sort.SearchStrings(absPathDirs, ob.key)
 		if i < len(absPathDirs) && ob.key == absPathDirs[i] {
-			//remove absPath from directory
 			//TODO: deal with cwd+"/" as it may create
-			// issue on adding windows support
 			rankedDirList = append(rankedDirList, strings.ReplaceAll(absPathDirs[i], cwd+"/", ""))
 
-			//remove from absPathDirs
 			absPathDirs = utils.Remove(absPathDirs, i)
 		}
 	}

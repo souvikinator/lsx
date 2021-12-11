@@ -54,7 +54,7 @@ func (app *Lsx) Init() {
 	app.AccessRecordFile = filepath.Join(app.ConfigDir, "access-record.yaml")
 
 	// create configDir if doesn't exist
-	err := os.MkdirAll(app.ConfigDir, 0664)
+	err := os.MkdirAll(app.ConfigDir, 0750)
 	utils.CheckError(err)
 
 	// create alias file , temp file and access record file

@@ -43,64 +43,64 @@ It's a pain to `cd` and `ls` multiple times to reach desired directory in termin
 > _Notice how directories gets ranked._
 
 ```bash
-lsx
+ls-x
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
+![ls-x](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
 
 ## Show hidden files as well
 
 ```bash
-lsx -a
+ls-x -a
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif)
+![ls-x](https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif)
 
 ## Set **alias** for directory paths
 
 ```bash
-lsx set-alias -n somealias -p path/to/be/aliased
+ls-x set-alias -n somealias -p path/to/be/aliased
 ```
 
 or
 
 ```bash
-lsx set-alias --path-name somealias --path path/to/be/aliased
+ls-x set-alias --path-name somealias --path path/to/be/aliased
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif)
+![ls-x](https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif)
 
 ## Updating Alias
 
 `set-alias` can also be used to update any existing alias. Let's say alias `abc` already exists for path `a/b/c`. on can update it like so:
 
 ```bash
-lsx set-alias -n abc -p d/e/f
+ls-x set-alias -n abc -p d/e/f
 ```
 
 ## List **alias** created by user
 
 ```bash
-lsx alias
+ls-x alias
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
+![ls-x](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
 
 ## Use **alias**
 
 ```bash
-lsx somealias
+ls-x somealias
 ```
 
-![lsx](https://github.com/souvikinator/lsx/raw/master/assets/use-alias.gif)
+![ls-x](https://github.com/souvikinator/lsx/raw/master/assets/use-alias.gif)
 
 ## Remove existing **alias**
 
 ```bash
-lsx remove-alias aliasname
+ls-x remove-alias aliasname
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
+![ls-x](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
 
 # ⚗️ Install
 
@@ -118,7 +118,7 @@ Clone the repo:
 
 > `chmod u+x install.sh`
 
-> `./install.sh`
+> `sudo ./install.sh`
 
 and you are ready to go, restart your terminal. Enjoy!
 

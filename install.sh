@@ -33,6 +33,13 @@ if [[ -d "$FISH_FUNC_DIR" ]];then
   cp "script/lsx.fish" "$FISH_FUNC_DIR/lsx.fish"
 fi
 
+#check if gopath is set
+if [[ -z "$GOPATH" ]];then
+	echo "ERROR: Your GOPATH is not set."
+	exit 1
+fi
+
+
 # build
 go build -o "$GOPATH/bin/ls-x"
 

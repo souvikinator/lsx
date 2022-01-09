@@ -9,28 +9,13 @@ ZSH_FUNC_DIR="$ZSH_DIR/functions"
 FISH_DIR="$HOME/.config/fish"
 FISH_FUNC_DIR="$FISH_DIR/functions"
 
+FISH_SHELL_SCRIPT_URL="https://raw.githubusercontent.com/souvikinator/lsx/master/script/lsx.fish";
+BASH_SHELL_SCRIPT_URL="https://raw.githubusercontent.com/souvikinator/lsx/master/script/lsx.sh";
+
 # go installed?
 if ! [[ -x "$(command -v go)" ]];then
 	echo "ERROR: GO not installed!"
 	exit 1
-fi
-
-if ! [[ -d "$HOME/.config/lsx" ]];then
-	mkdir -p "$HOME/.config/lsx"
-fi
-
-# bash
-cp "script/lsx.sh" "$HOME/.config/lsx/lsx.sh"
-
-#zsh
-if [[ -d "$ZSH_DIR" ]];then
-	mkdir -p "$ZSH_FUNC_DIR"
-  cp "script/lsx.sh" "$ZSH_FUNC_DIR/lsx"
-fi
-
-#fish
-if [[ -d "$FISH_FUNC_DIR" ]];then
-  cp "script/lsx.fish" "$FISH_FUNC_DIR/lsx.fish"
 fi
 
 #check if gopath is set
@@ -39,15 +24,46 @@ if [[ -z "$GOPATH" ]];then
 	exit 1
 fi
 
+if ! [[ -d "$HOME/.config/lsx" ]];then
+	mkdir -p "$HOME/.config/lsx"
+fi
 
-# build
-go build -o "$GOPATH/bin/ls-x"
+echo "Downloading required scripts...";
+
+
+if [[ -d "$ZSH_DIR" ]];then
+	#zsh
+	mkdir -p "$ZSH_FUNC_DIR"
+  curl "$BASH_SHELL_SCRIPT_URL" -o "$ZSH_FUNC_DIR/lsx"
+elif [[ -d "$FISH_FUNC_DIR" ]];then
+	#fish
+  curl "$FISH_SHELL_SCRIPT_URL" -o "$FISH_FUNC_DIR/lsx.fish"
+else
+	# bash
+	curl "$BASH_SHELL_SCRIPT_URL" -o "$HOME/.config/lsx/lsx.sh"
+fi
+
+
+# install
+go install "github.com/souvikinator/lsx@latest"
+
 
 if [[ $? -ne 0 ]];then
-  echo "ERROR: build Failure!"
+  echo "ERROR: Installation failed!"
   exit 1
 else
-  echo "INFO: build Success!"
+  echo "INFO: Successfully installed!"
+fi
+
+# change installed binary name: lsx -> ls-x
+echo "changing executable name"
+cp "$GOPATH/bin/lsx" "$GOPATH/bin/ls-x"
+
+if [[ $? -ne 0 ]];then
+  echo "ERROR: failed to change executable name!"
+  exit 1
+else
+  echo "INFO: executable name changed!"
 fi
 
 # add line to bashrc if exists

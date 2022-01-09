@@ -46,15 +46,15 @@ It's a pain to `cd` and `ls` multiple times to reach desired directory in termin
 lsx
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/demo.gif)
+<img src="https://github.com/souvikinator/lsx/blob/master/assets/demo.gif" width="50%" height="50%" />
 
 ## Show hidden files as well
 
 ```bash
 lsx -a
 ```
-
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif)
+	
+<img src="https://github.com/souvikinator/lsx/blob/master/assets/all-mode.gif" width=50% height=50%>
 
 ## Set **alias** for directory paths
 
@@ -68,7 +68,7 @@ or
 lsx set-alias --path-name somealias --path path/to/be/aliased
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif)
+<img src="https://github.com/souvikinator/lsx/blob/master/assets/set-alias.gif" width=50% height=50%>
 
 ## Updating Alias
 
@@ -84,7 +84,7 @@ lsx set-alias -n abc -p d/e/f
 lsx alias
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif)
+<img src="https://github.com/souvikinator/lsx/blob/master/assets/list-alias.gif" width=50% height=50%>
 
 ## Use **alias**
 
@@ -92,7 +92,7 @@ lsx alias
 lsx somealias
 ```
 
-![lsx](https://github.com/souvikinator/lsx/raw/master/assets/use-alias.gif)
+<img src="https://github.com/souvikinator/lsx/raw/master/assets/use-alias.gif" width=50% height=50%>
 
 ## Remove existing **alias**
 
@@ -100,11 +100,13 @@ lsx somealias
 lsx remove-alias aliasname
 ```
 
-![lsx](https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif)
+<img src="https://github.com/souvikinator/lsx/blob/master/assets/remove-alias.gif" width=50% height=50%>
 
 # ⚗️ Install
 
-> ## **Note**: make sure to have Go installed and your GOPATH is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
+> ## **⚠️** make sure:
+> ### Must have Go installed 
+> ### GOPATH and `$GOPATH/bin` is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
 
 ### Step-1:
 

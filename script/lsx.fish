@@ -1,5 +1,5 @@
 function lsx --description 'Run LSX'
-    set LSX ~/go/bin/ls-x
+    set LSX "$GOPATH/bin/ls-x"
     set TEMP_FILE "$HOME/.config/lsx/lsx.tmp"
     set LSX_BANNER "
     __    _  __

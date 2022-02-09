@@ -57,7 +57,8 @@ fi
 
 # change installed binary name: lsx -> ls-x
 echo "changing executable name"
-cp "$GOPATH/bin/lsx" "$GOPATH/bin/ls-x"
+mv "$GOPATH/bin/lsx" "$GOPATH/bin/ls-x"
+
 
 if [[ $? -ne 0 ]];then
   echo "ERROR: failed to change executable name!"

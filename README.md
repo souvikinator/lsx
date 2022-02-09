@@ -30,8 +30,6 @@ It's a pain to `cd` and `ls` multiple times to reach desired directory in termin
 
 **It also ranks your directories based on how often you access them and placing them on top of the list to reduce searching and navigation time.**
 
-> **NOTE**: to know more about the ranking algorithm head over [here](https://github.com/souvikinator/lsx/blob/master/utils/rank.go)
-
 # 💻 Demo
 
 > **Note**: once you reach the desired destination, use `ctr+c` to exit and stay in the desired destination
@@ -39,8 +37,6 @@ It's a pain to `cd` and `ls` multiple times to reach desired directory in termin
 ## Navigate through terminal and perform search:
 
 - use `/` to trigger search and start typing to search
-
-> _Notice how directories gets ranked._
 
 ```bash
 lsx
@@ -105,46 +101,28 @@ lsx remove-alias aliasname
 # ⚗️ Install
 
 > ## **⚠️** make sure:
-> ### Must have Go installed 
-> ### GOPATH and `$GOPATH/bin` is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
+> - Must have Go installed 
+> - GOPATH is set and `$GOPATH/bin` is added to [PATH](https://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit)
 
-### Step-1:
+### Run following command 
 
-Clone the repo:
-
-`git clone https://github.com/souvikinator/lsx.git`
-
-### Step-2:
-
-> `cd lsx`
-
-> `chmod u+x install.sh`
-
-> `./install.sh`
+```bash
+curl https://raw.githubusercontent.com/souvikinator/lsx/master/install.sh | bash
+```
 
 and you are ready to go, restart your terminal. Enjoy!
 
-**Note**: **zsh**, **bash** and **fish** shell users just need to run the installation script and lsx will be ready to use. In case the command is not working add following line at the end of your shell resource file (`.bashrc`, `.zshrc`...):
-
-`source ~/.config/lsx/lsx.sh`
-
-and then restart your terminal
+> **Note**: **zsh**, **bash** and **fish** shell users just need to run the installation script and lsx will be ready to use. In case the command is not working add following line at the end of your shell resource file (`.bashrc`, `.zshrc`...):
+>
+> `source ~/.config/lsx/lsx.sh`
+>
+> and then restart your terminal
 
 **open an issue if still facing installation problems**
 
 ## How to update?
 
-Go inside the cloned directory and add use following command:
-
-```bash
-git pull origin master
-```
-
-and then:
-
-```bash
-./install.sh
-```
+> running the command used for installing updates `lsx`
 
 restart your terminal and you are good to go.
 

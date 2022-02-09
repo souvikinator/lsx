@@ -75,7 +75,7 @@ var rootCmd = &cobra.Command{
 				Label:        fmt.Sprintf("%s (%d)", strings.ReplaceAll(currentPath, home, "~"), len(dirs)-1),
 				Items:        dirs,
 				Templates:    templates,
-				Size:         11,
+				Size:         utils.GetTerminalHeight() - 3,
 				Searcher:     searcher,
 				HideSelected: true,
 			}

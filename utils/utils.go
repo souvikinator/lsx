@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
+	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
 
@@ -32,6 +33,11 @@ func HomeDir() string {
 	home, err := os.UserHomeDir()
 	CheckError(err)
 	return home
+}
+
+func GetTerminalHeight() int {
+	_, height, _ := term.GetSize(0)
+	return height
 }
 
 func GetNonDotDirs(dirs []string) []string {
